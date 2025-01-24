@@ -10,9 +10,11 @@ import LandingPage from "./components/pages/landingPage";
 import HomePage from "./components/pages/homePage";
 import Login from "./components/pages/loginPage";
 import Signup from "./components/pages/registerPage";
+import MbtaAlertsPage from "./components/pages/mbtaAlerts";
 import PrivateUserProfile from "./components/pages/privateUserProfilePage";
 import { createContext, useState, useEffect } from "react";
 import getUserInfo from "./utilities/decodeJwt";
+import MbtaVehicles from "./components/pages/mbtaVehicles"
 
 export const UserContext = createContext();
 //test change
@@ -34,6 +36,8 @@ const App = () => {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
           <Route path="/privateUserProfile" element={<PrivateUserProfile />} />
+          <Route exact path="/mbtaAlerts" element={<MbtaAlertsPage />} />
+          <Route exact path="/mbtaVehicles" element={<MbtaVehicles />} />
         </Routes>
       </UserContext.Provider>
     </>
