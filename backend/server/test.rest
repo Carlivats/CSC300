@@ -49,4 +49,15 @@ Content-Type: application/json
 }
 
 ###
-POST  http://localhost:8081/user/deleteAll
+POST  http://localhost:8081/user/deleteAll 
+
+###
+POST http://localhost:8081/reviews/createReview
+Content-Type: application/json
+
+{
+    "username": "John Doe",
+    "comment": "Nice!",
+    "rating": 5
+}
+
