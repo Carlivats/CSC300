@@ -61,3 +61,11 @@ Content-Type: application/json
     "rating": 5
 }
 
+PUT http://localhost:8081/updateReview/65fabc12345de6789abcd000
+Content-Type: application/json
+
+{
+    "username": "UpdatedUser",
+    "comment": "This is an updated review!",
+    "rating": 5
+}
