@@ -3,7 +3,7 @@ const router = express.Router();
 const reviewModel = require("../models/reviewModel"); // Import Review model
 const { reviewValidation } = require("../models/reviewValidator"); // Validation function
 
-// 📌 PUT - Create a Review
+// 📌 PUT - Update a Review
 router.put("/updateReview/:id", async (req, res) => {
     try {
         // Validate the incoming review data

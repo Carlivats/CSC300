@@ -61,7 +61,8 @@ Content-Type: application/json
     "rating": 5
 }
 
-PUT http://localhost:8081/updateReview/65fabc12345de6789abcd000
+###
+PUT http://localhost:8081/reviews/updateReview/67d1ac5360996470c48560c3
 Content-Type: application/json
 
 {
