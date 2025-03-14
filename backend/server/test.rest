@@ -72,7 +72,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8081/reviews/deleteReview/67d1ac5360996470c48560c3
+DELETE http://localhost:8081/reviews/deleteReview/67d45033d20220d68e8970cf
 
 ###
 GET http://localhost:8081/reviews/getReview/67cf3e178e7b872479769e7f
