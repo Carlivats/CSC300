@@ -11,7 +11,7 @@ const deleteUser = require('./routes/userDeleteAll')
 const createReview = require('./routes/createReview')
 const updateReview = require('./routes/updateReview')
 const getReview = require('./routes/GetReview')
-const deleteReview = require('./routes/DeleteReview')
+const deleteReview = require('./routes/deleteReview')
 
 require('dotenv').config();
 const SERVER_PORT = 8081
