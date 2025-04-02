@@ -68,7 +68,7 @@ Content-Type: application/json
 {
     "username": "UpdatedUser",
     "comment": "This is an updated review!",
-    "rating": 5
+    "rating": 3
 }
 
 ###
