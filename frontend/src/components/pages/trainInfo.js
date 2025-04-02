@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Container, Row, Col, Button} from "react-bootstrap"; // Import Bootstrap components
+import { Card, Container, Row, Col, Button } from "react-bootstrap"; // Import Bootstrap components
 
 
 const url = 'http://localhost:8081/reviews/getReviews';
 
-function TrainInfo(){
+function TrainInfo() {
   const [reviews, setReviews] = useState([]); // State to store reviews
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,14 +30,36 @@ function TrainInfo(){
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  // Function to generate Stars
   const renderStars = (rating) => "⭐".repeat(rating);
 
+  //Funtion to calculate average rating
+  const calculateAverageRating = () => {
+    if (reviews.length === 0) return 0;
+    const total = reviews.reduce((sum, review) => sum + review.rating, 0);
+    return total / reviews.length;
+  }
+
+  const averageRating = calculateAverageRating();
+
+  // Function to Load More Reviews
   const loadMoreReviews = () => {
-    setVisibleReviews(prev => prev + 10);
+    const newReviwesNumber = 10
+    setVisibleReviews(prev => prev + newReviwesNumber);
   }
   return (
     <Container>
       <h1>User Ratings</h1>
+      {/* Overall Rating Card */}
+      <Card>
+        <Card.Body>
+          <Card.Title>Overall Rating</Card.Title>
+          <Card.Text className="overall-stars">
+            {renderStars(averageRating)} ({averageRating.toFixed(1)}/5)
+          </Card.Text>
+        </Card.Body>
+      </Card>
+
       <div className="review-container">
         <Row className="d-flex flex-column align-items-center">
           {reviews.length === 0 ? (
@@ -51,7 +73,7 @@ function TrainInfo(){
                     <Card.Text>{renderStars(review.rating)}</Card.Text>
                     <Card.Text>"{new Date(review.date).toLocaleDateString()}"</Card.Text>
                     <Card.Footer className="text-muted">
-                    {review.comment}
+                      {review.comment}
                     </Card.Footer>
                   </Card.Body>
                 </Card>
