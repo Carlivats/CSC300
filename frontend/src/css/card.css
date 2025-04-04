@@ -22,3 +22,14 @@
     font-weight: bold;
     color: #333;
 }
+
+.review-card {
+    font-size: 12px; /* Reduce text size */
+    padding: 4px; /* Smaller padding */
+    max-width: 100%; /* Ensure responsiveness */
+}
+
+.review-card .card-title {
+    font-size: 16px; /* Keep the title larger */
+    font-weight: bold; /* Make it bold */
+}
