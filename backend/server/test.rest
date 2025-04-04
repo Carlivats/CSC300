@@ -1,4 +1,5 @@
-POST http://localhost:8080/user/signup
+# Signup a new user
+POST http://localhost:8081/user/signup
 Content-Type: application/json 
 
 {
@@ -9,7 +10,8 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/user/login
+# Login the user
+POST http://localhost:8081/user/login
 Content-Type: application/json 
 
 {
@@ -18,13 +20,33 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8081/user/getAll
-Content-Type: application/json
+
+# Admin Login
+POST http://localhost:8081/user/signup
+Content-Type: application/json 
+
+{
+    "username" : "adminuser",
+    "email" : "admin@example.com",
+    "password" : "AdminPass123",
+    "isAdmin": true
+}
+
+# Copy the token from the response and replace <ADMIN-JWT-TOKEN-HERE> in the admin tests below.
 
 ###
 
+# Get all users (Requires authentication)
+GET http://localhost:8081/user/getAll
+Content-Type: application/json
+Authorization: Bearer <67efe163fe3afbe0781fd623>
+
+###
+
+# Edit user details (Requires authentication)
 POST http://localhost:8081/user/editUser
 Content-Type: application/json 
+Authorization: Bearer <67efe163fe3afbe0781fd623>
 
 {
     "userId" : "635ab8dfc407faf9f73deaf2",
@@ -33,27 +55,29 @@ Content-Type: application/json
 }
 
 ###
-GET  http://localhost:8081/user/getUserById
-Content-Type: application/json 
+
+# Get user by ID
+GET http://localhost:8081/user/getUserById
+Content-Type: application/json
+Authorization: Bearer <67efe163fe3afbe0781fd623>
 
 {
     "userId" : "635ab8dfc407faf9f73deaf1"
 }
 
 ###
-GET  http://localhost:8081/user/getUserById
-Content-Type: application/json 
 
-{
-    "userId" : "634edb2a16710b2cda6fb370"
-}
-
-###
-POST  http://localhost:8081/user/deleteAll 
+# Delete a user (Admin only)
+DELETE http://localhost:8081/user/deleteUser/635ab8dfc407faf9f73deaf2
+Content-Type: application/json
+Authorization: Bearer <67efe163fe3afbe0781fd623>
 
 ###
+
+# Create a review
 POST http://localhost:8081/reviews/createReview
 Content-Type: application/json
+Authorization: Bearer <67efe163fe3afbe0781fd623>
 
 {
     "username": "John Doe",
@@ -62,22 +86,15 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:8081/reviews/updateReview/67d45fbaccd71ca4fe9dca9b
+
+# Delete a review (Admin only)
+DELETE http://localhost:8081/reviews/deleteReview/67d45fbaccd71ca4fe7b1234
 Content-Type: application/json
-
-{
-    "username": "UpdatedUser",
-    "comment": "This is an updated review!",
-    "rating": 3
-}
+Authorization: Bearer <67efe163fe3afbe0781fd623>
 
 ###
-DELETE http://localhost:8081/reviews/deleteReview/67d45033d20220d68e8970cf
 
-###
-GET http://localhost:8081/reviews/getReview/67cf3e178e7b872479769e7f
-
-###
-GET http://localhost:8081/reviews/getReviews
-
-
+# Delete all users (Admin only)
+POST http://localhost:8081/user/deleteAll
+Content-Type: application/json
+Authorization: Bearer <67efe163fe3afbe0781fd623>

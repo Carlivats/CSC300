@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const reviewModel = require("../models/reviewModel"); // Import Review model
+const isAdmin = require("../middleware/isAdmin"); // Import admin check
+const { authenticateUser } = require("../middleware/authMiddleware"); // Import authentication
 
-// 📌 DELETE - Remove a Review by ID
-router.delete("/deleteReview/:id", async (req, res) => {
+// 📌 DELETE - Remove a Review by ID (Admin only)
+router.delete("/deleteReview/:id", authenticateUser, isAdmin, async (req, res) => {
     try {
         const { id } = req.params; // Extract review ID from URL parameters
         

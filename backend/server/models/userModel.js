@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-//user schema/model
+// User schema/model
 const newUserSchema = new mongoose.Schema(
   {
     username: {
@@ -11,12 +11,18 @@ const newUserSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
+      unique: true, // Ensure emails are unique
       label: "email",
     },
     password: {
-      required: true,
       type: String,
-      min : 8
+      required: true,
+      min: 8,
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"], // Defines user roles
+      default: "user", // Default role is "user"
     },
     date: {
       type: Date,
@@ -26,4 +32,4 @@ const newUserSchema = new mongoose.Schema(
   { collection: "users" }
 );
 
-module.exports = mongoose.model('users', newUserSchema)
+module.exports = mongoose.model("users", newUserSchema);
