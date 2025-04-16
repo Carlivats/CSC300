@@ -16,6 +16,9 @@ import { createContext, useState, useEffect } from "react";
 import getUserInfo from "./utilities/decodeJwt";
 import MbtaVehicles from "./components/pages/mbtaVehicles"
 import TrainInfo from "./components/pages/trainInfo"
+import TrainSelection from './components/pages/trainSelection';
+import TrainSchedule from './components/pages/trainSchedule';
+
 
 export const UserContext = createContext();
 //test change
@@ -40,6 +43,8 @@ const App = () => {
           <Route exact path="/mbtaAlerts" element={<MbtaAlertsPage />} />
           <Route exact path="/mbtaVehicles" element={<MbtaVehicles />} />
           <Route exact path="/trainInfo" element={<TrainInfo />} />
+          <Route exact path="/train-selection" element={<TrainSelection />} />
+          <Route exact path="/train-schedule/:lineId" element={<TrainSchedule />} />
         </Routes>
       </UserContext.Provider>
     </>
