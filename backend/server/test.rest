@@ -92,9 +92,3 @@ DELETE http://localhost:8081/reviews/deleteReview/67d45fbaccd71ca4fe7b1234
 Content-Type: application/json
 Authorization: Bearer <67efe163fe3afbe0781fd623>
 
-###
-
-# Delete all users (Admin only)
-POST http://localhost:8081/user/deleteAll
-Content-Type: application/json
-Authorization: Bearer <67efe163fe3afbe0781fd623>
