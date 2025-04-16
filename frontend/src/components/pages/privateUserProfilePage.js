@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
-import getUserInfo from "../../utilities/decodeJwt";
 
 const PrivateUserProfile = () => {
   const [show, setShow] = useState(false);
@@ -11,7 +10,37 @@ const PrivateUserProfile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setUser(getUserInfo());
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        console.warn("No token found in localStorage");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:8081/user/profile", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch profile info");
+        }
+
+        const profileData = await response.json();
+        setUser({
+          username: profileData.username || 'Default Username',
+          profileImageUrl: profileData.profileImageUrl,
+          description: profileData.description,
+        });
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+
+    fetchProfile();
   }, []);
 
   const handleLogout = () => {
@@ -19,14 +48,14 @@ const PrivateUserProfile = () => {
     navigate("/");
   };
 
-  if (!user || !user.username) {
+  if (!user.username) {
     return (
       <div>
         <h4>Log in to view this page.</h4>
       </div>
     );
   }
-
+//background
   return (
     <div
       className="container-fluid d-flex position-relative"
@@ -41,7 +70,7 @@ const PrivateUserProfile = () => {
         minHeight: "100vh",
       }}
     >
-      {/* Left-Side Profile Banner */}
+      {/* Left Sidebar */}
       <div
         style={{
           position: "absolute",
@@ -53,128 +82,79 @@ const PrivateUserProfile = () => {
           zIndex: 0,
           display: "flex",
           flexDirection: "column",
-          alignItems: "center", // Center items in the sidebar
-          justifyContent: "flex-start", // Ensure content is aligned to the top
-          padding: "10px", // Padding for the content
+          alignItems: "center",
+          justifyContent: "flex-start",
+          padding: "10px",
         }}
       >
-        <ProfilePicture imageUrl={user.profilePicture} />
-        <Username name={user.username} />
-
-        {/* New Text Lines */}
+        <Image
+          src={user.profileImageUrl}
+          alt="Profile"
+          roundedCircle
+          style={{
+            width: "200px",
+            height: "200px",
+            objectFit: "cover",
+            border: "3px solid white",
+            marginBottom: "10px",
+          }}
+        />
+        <h4 style={{ color: "white", fontSize: "18px" }}>{user.username}</h4>
         <div style={{ color: "white", fontSize: "16px", marginTop: "10px" }}>
           <p>Member Since: August 2020</p>
           <p>Location: Salem, MA</p>
         </div>
-
-        <ProfileButtons onLogout={() => setShow(true)} />
+        <Button
+          variant="outline-light"
+          onClick={() => setShow(true)}
+          style={{ marginTop: "20px" }}
+        >
+          Log Out
+        </Button>
       </div>
 
-      {/* Right Section - Description Box */}
+      {/* Description Section */}
       <div
         style={{
-          position: "absolute", // Ensure it’s positioned absolutely
+          position: "absolute",
           top: "50%",
-          left: "300px", // 300px from the left side
-          right: "50px", // 50px from the right side
-          transform: "translateY(-50%)", // Center vertically
-          width: "calc(100% - 350px)", // Remaining space between the left (300px) and right (50px) side
-          height: "calc(100vh - 100px)", // Ensure it takes most of the height
+          left: "300px",
+          right: "50px",
+          transform: "translateY(-50%)",
+          width: "calc(100% - 350px)",
+          height: "calc(100vh - 100px)",
           padding: "20px",
-          boxSizing: "border-box", // Prevent box from overflowing the container
+          boxSizing: "border-box",
         }}
       >
         <div
           className="p-3 border rounded"
           style={{
             backgroundColor: "rgba(211, 211, 211, 0.9)",
-            height: "100%", // Make sure it fills up the vertical space of the box
+            height: "100%",
             paddingTop: "20px",
-            paddingBottom: "20px",
-            overflowY: "auto", // Make content scrollable if it overflows
-            fontSize: "26px",
-            fontFamily: "Arial",
-            lineHeight: "1.6",
           }}
         >
-          {user.description || "Hi, I am Tim, and I am from Salem, Massachusetts — a town known for its rich history and spooky legends, but for me, it is all about trains. I have been fascinated by locomotives since I was a kid. Growing up near the railroad tracks, I was always captivated by the sound and power of the trains passing through Salem. There is something magical about watching them glide down the tracks, carrying with them the promise of distant places. My love for trains goes beyond just watching them; I am deeply fascinated by their history. Trains played a pivotal role in shaping our nations growth, and I love learning about their evolution — from the early steam engines to the modern high-speed rail systems. I find it incredible how trains have connected cities and cultures, and how they continue to symbolize progress and adventure. Whether I am snapping photos of vintage locomotives or simply enjoying the sound of a train whistle on a quiet afternoon, trains have always been a central part of my life. They are more than just machines to me — they are a connection to the past, and a constant source of inspiration."}
+          <h5>Description</h5>
+          <p>{user.description || "No description available."}</p>
         </div>
       </div>
 
       {/* Logout Modal */}
-      <Modal show={show} onHide={() => setShow(false)} backdrop="static" keyboard={false}>
+      <Modal show={show} onHide={() => setShow(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Log Out</Modal.Title>
+          <Modal.Title>Confirm Logout</Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure you want to log out?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShow(false)}>
-            Close
+            Cancel
           </Button>
           <Button variant="primary" onClick={handleLogout}>
-            Yes
+            Log Out
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>
-  );
-};
-
-// Profile Picture Component
-const ProfilePicture = ({ imageUrl }) => {
-  return (
-    <Image
-      src={imageUrl || "https://i.imgur.com/wR4o0WE.png"}
-      roundedCircle
-      width="200"
-      height="200"
-      alt="Profile"
-      className="mb-3"
-    />
-  );
-};
-
-// Username Component
-const Username = ({ name }) => {
-  return <h2 className="text-center" style={{ color: "white" }}>{name}</h2>;
-};
-
-// Profile Buttons Component
-const ProfileButtons = ({ onLogout }) => {
-  return (
-    <div
-      className="d-flex flex-column w-100 mt-4"
-      style={{
-        position: "absolute", // Position absolute to stick to the bottom of the sidebar
-        bottom: "10px", // Adjust to create some spacing from the bottom
-        left: "10px",
-      }}
-    >
-      <Button
-        className="mt-2"
-        variant="secondary"
-        style={{
-          width: "230px",
-          padding: "10px",
-          fontSize: "20px",
-          borderRadius: "25px",
-        }}
-      >
-        Edit Profile
-      </Button>
-      <Button
-        className="mt-2"
-        variant="danger"
-        style={{
-          width: "230px",
-          padding: "10px",
-          fontSize: "20px",
-          borderRadius: "25px",
-        }}
-        onClick={onLogout}
-      >
-        Log Out
-      </Button>
     </div>
   );
 };

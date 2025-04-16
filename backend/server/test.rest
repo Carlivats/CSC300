@@ -3,9 +3,9 @@ POST http://localhost:8081/user/signup
 Content-Type: application/json 
 
 {
-    "username" : "tochiamanze",
-    "email" : "cdon@gmail.com",
-    "password" : "tochi12345"
+    "username" : "greentrain",
+    "email" : "greentrain@gmail.com",
+    "password" : "greentrain"
 }
 
 ###
@@ -15,8 +15,8 @@ POST http://localhost:8081/user/login
 Content-Type: application/json 
 
 {
-    "username" : "tochiamanze",
-    "password" : "tochi12345"
+    "username" : "Ilovetrains2025",
+    "password" : "Ilovetrains2025"
 }
 
 ###
@@ -98,3 +98,43 @@ Authorization: Bearer <67efe163fe3afbe0781fd623>
 POST http://localhost:8081/user/deleteAll
 Content-Type: application/json
 Authorization: Bearer <67efe163fe3afbe0781fd623>
+
+
+### Test GET request to fetch user profile information
+GET http://localhost:8081/user/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWYxZTUwOGYxM2I3NGQxM2VmNTExNSIsImVtYWlsIjoidHJhaW5zQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSWxvdmV0cmFpbnMyMDI1IiwicGFzc3dvcmQiOiIkMmIkMTAkamRkVmlWZVlZaWNpWC9sZHoyL1plLjlRWWRDbDBSbUxOL2V5RjcyLmU0eVEyS2JaWFVZZksiLCJpYXQiOjE3NDQ3NzU5MjEsImV4cCI6MTc0NDg2MjMyMX0.fhnBccJEM7iEcu1VTKq0XqtXp-Ch_V5UDH7aAUabF3g
+### Test POST request to update user profile image URL and description (with JSON only)
+POST http://localhost:8081/user/editProfile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWYxZTUwOGYxM2I3NGQxM2VmNTExNSIsImVtYWlsIjoidHJhaW5zQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSWxvdmV0cmFpbnMyMDI1IiwicGFzc3dvcmQiOiIkMmIkMTAkamRkVmlWZVlZaWNpWC9sZHoyL1plLjlRWWRDbDBSbUxOL2V5RjcyLmU0eVEyS2JaWFVZZksiLCJpYXQiOjE3NDQ3NzU5MjEsImV4cCI6MTc0NDg2MjMyMX0.fhnBccJEM7iEcu1VTKq0XqtXp-Ch_V5UDH7aAUabF3g
+Content-Type: application/json
+
+{
+  "description": "New Profile Description Made :)",
+  "profileImageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Amtrak_Auto_Train_52_Passing_Through_Guinea_Station%2C_Virginia.jpg/1200px-Amtrak_Auto_Train_52_Passing_Through_Guinea_Station%2C_Virginia.jpg"
+}
+
+
+### Test POST request to update user profile description only (without image)
+POST http://localhost:8081/user/editProfile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWYxZTUwOGYxM2I3NGQxM2VmNTExNSIsImVtYWlsIjoidHJhaW5zQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSWxvdmV0cmFpbnMyMDI1IiwicGFzc3dvcmQiOiIkMmIkMTAkamRkVmlWZVlZaWNpWC9sZHoyL1plLjlRWWRDbDBSbUxOL2V5RjcyLmU0eVEyS2JaWFVZZksiLCJpYXQiOjE3NDQ3NzU5MjEsImV4cCI6MTc0NDg2MjMyMX0.fhnBccJEM7iEcu1VTKq0XqtXp-Ch_V5UDH7aAUabF3g
+Content-Type: application/json
+
+{
+  "description": "Updated description without image."
+}
+
+### Upload profile image from local file
+POST http://localhost:8081/user/editProfile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWYxZTUwOGYxM2I3NGQxM2VmNTExNSIsImVtYWlsIjoidHJhaW5zQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSWxvdmV0cmFpbnMyMDI1IiwicGFzc3dvcmQiOiIkMmIkMTAkamRkVmlWZVlZaWNpWC9sZHoyL1plLjlRWWRDbDBSbUxOL2V5RjcyLmU0eVEyS2JaWFVZZksiLCJpYXQiOjE3NDQ3NzU5MjEsImV4cCI6MTc0NDg2MjMyMX0.fhnBccJEM7iEcu1VTKq0XqtXp-Ch_V5UDH7aAUabF3g
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="description"
+
+Updated via REST Client with local file
+--MyBoundary
+Content-Disposition: form-data; name="profileImage"; filename="smiley.png"
+Content-Type: image/png
+
+< C:\Users\ladde\OneDrive\Desktop\smiley.png
+--MyBoundary--

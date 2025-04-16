@@ -28,6 +28,14 @@ const newUserSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    profileImageUrl: {
+      type: String,
+      required: false,
+    },
+    description: {
+      type: String,
+      default: "No Profile Description Set",
+    },
   },
   { collection: "users" }
 );
