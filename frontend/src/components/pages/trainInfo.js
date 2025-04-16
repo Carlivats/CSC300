@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Container, Row, Col, Button } from "react-bootstrap"; // Import Bootstrap components
-
+import CommentBox from "../commentBox";
 
 const url = 'http://localhost:8081/reviews/getReviews';
 
@@ -42,11 +42,39 @@ function TrainInfo() {
 
   const averageRating = calculateAverageRating();
 
+  const handleReviewSubmit = async ({ comment, rating }) => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      console.log("accessToken:", localStorage.getItem("accessToken"));
+
+      const response = await fetch("http://localhost:8081/reviews/createReview", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({
+          comment,
+          rating,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to submit review");
+
+      const newReview = await response.json();
+      setReviews(prev => [newReview, ...prev]);
+    } catch (err) {
+      console.error("Error submitting review:", err);
+      setError("Failed to submit review.");
+    }
+  };
+
   // Function to Load More Reviews
   const loadMoreReviews = () => {
     const newReviwesNumber = 10
     setVisibleReviews(prev => prev + newReviwesNumber);
   }
+
   return (
     <Container>
       <h1>User Ratings</h1>
@@ -60,6 +88,8 @@ function TrainInfo() {
         </Card.Body>
       </Card>
 
+      <CommentBox onSubmit={handleReviewSubmit} />
+
       <div className="review-container">
         <Row className="d-flex flex-column align-items-center">
           {reviews.length === 0 ? (
@@ -69,12 +99,21 @@ function TrainInfo() {
               <Col md={6} key={review._id} className="mb-3">
                 <Card className="review-card">
                   <Card.Body>
-                    <Card.Title>{review.username}</Card.Title>
-                    <Card.Text>{renderStars(review.rating)}</Card.Text>
-                    <Card.Text>"{new Date(review.date).toLocaleDateString()}"</Card.Text>
-                    <Card.Footer className="text-muted">
-                      {review.comment}
-                    </Card.Footer>
+                    <img
+                      src={review.profilePic || "https://via.placeholder.com/40"}
+                      alt={review.username}
+                      className="rounded-circle me-3"
+                      width="40"
+                      height="40"
+                    />
+                    <div>
+                      <Card.Title>{review.username}</Card.Title>
+                      <Card.Text>{renderStars(review.rating)}</Card.Text>
+                      <Card.Text>"{review.comment}"</Card.Text>
+                      <Card.Footer className="text-muted">
+                        {new Date(review.date).toLocaleDateString()}
+                      </Card.Footer>
+                    </div>
                   </Card.Body>
                 </Card>
               </Col>

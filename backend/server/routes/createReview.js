@@ -1,36 +1,30 @@
 const express = require("express");
 const router = express.Router();
-const reviewModel = require("../models/reviewModel"); // Import Review model
+const Review = require("../models/reviewModel"); // Import Review model
 const { reviewValidation } = require("../models/reviewValidator"); // Validation function (optional)
+const { authenticateUser } = require("../middleware/authMiddleware");
 
 // 📌 POST - Create a Review
-router.post("/createReview", async (req, res) => {
+router.post("/createReview", authenticateUser, async (req, res) => {
     try {
-        // Validate the incoming review data (if using validation)
-        const { error } = reviewValidation(req.body);
-        if (error) return res.status(400).send({ message: error.errors[0].message });
-
         // Extract review details from request body
-        const { username, comment, rating } = req.body;
+        const { comment, rating } = req.body;
 
-        // Create a new review document
-        const newReview = new reviewModel({
-            username,
+        if (!comment || !rating) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        const newReview = new Review({
+            username: req.user.username,
             comment,
             rating,
         });
 
-        // Save the review to the database
-        const savedReview = await newReview.save();
-
-        res.status(201).send({
-            message: "Review created successfully!",
-            review: savedReview,
-        });
-
+        await newReview.save();
+        res.status(201).json(newReview);
     } catch (error) {
         console.error("Error creating review:", error);
-        res.status(500).send({ message: "Internal Server Error" });
+        res.status(500).json({ message: "Failed to create review" });
     }
 });
 
