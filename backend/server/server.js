@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 const app = express();
 const cors = require('cors')
@@ -14,8 +16,9 @@ const getReview = require('./routes/GetReview')
 const deleteReview = require('./routes/deleteReview')
 const getAllReview = require('./routes/getAllReview')
 const adminRoutes = require('./routes/adminRoutes')
+const editProfileRoute = require('./routes/userEditProfile')
+const getProfileRoute = require('./routes/userGetProfile')
 
-require('dotenv').config();
 const SERVER_PORT = 8081
 
 dbConnection()
@@ -33,6 +36,9 @@ app.use('/reviews',getReview)
 app.use('/reviews',deleteReview)
 app.use('/reviews',getAllReview)
 app.use('/reviews',adminRoutes)
+app.use('/user', getProfileRoute)
+app.use('/user', editProfileRoute)
+
 
 app.listen(SERVER_PORT, (req, res) => {
     console.log(`The backend service is running on port ${SERVER_PORT} and waiting for requests.`);
