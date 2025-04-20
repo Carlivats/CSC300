@@ -77,12 +77,11 @@ Authorization: Bearer <67efe163fe3afbe0781fd623>
 # Create a review
 POST http://localhost:8081/reviews/createReview
 Content-Type: application/json
-Authorization: Bearer <67efe163fe3afbe0781fd623>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2VmMWU1MDhmMTNiNzRkMTNlZjUxMTUiLCJpYXQiOjE3NDUxODg4OTh9.A6E4PopXX-d78wlbMO238CdZ5bvmVELbfJWe3wYF2Jk
 
 {
-    "username": "John Doe",
-    "comment": "Nice!",
-    "rating": 5
+    "comment": "Not Nice!",
+    "rating": 2
 }
 
 ###
