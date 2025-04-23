@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import { Card, Container, Row, Col, Button } from "react-bootstrap"; // Import Bootstrap components
 import CommentBox from "../commentBox";
 
@@ -47,25 +48,21 @@ function TrainInfo() {
       const accessToken = localStorage.getItem("accessToken");
       console.log("accessToken:", localStorage.getItem("accessToken"));
 
-      const response = await fetch("http://localhost:8081/reviews/createReview", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`
-        },
-        body: JSON.stringify({
-          comment,
-          rating,
-        }),
-      });
+      const response = await axios.post(
+        "http://localhost:8081/reviews/createReview",
+        { comment, rating },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
-      if (!response.ok) throw new Error("Failed to submit review");
-
-      const newReview = await response.json();
-      setReviews(prev => [newReview, ...prev]);
-    } catch (err) {
-      console.error("Error submitting review:", err);
-      setError("Failed to submit review.");
+      console.log("Review submitted:", response.data);
+      // You could refresh reviews or show success message here
+    } catch (error) {
+      console.error("Error submitting review:", error.response?.data || error.message);
+      // Show error to user
     }
   };
 
