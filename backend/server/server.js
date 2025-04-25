@@ -18,6 +18,7 @@ const getAllReview = require('./routes/getAllReview')
 const adminRoutes = require('./routes/adminRoutes')
 const editProfileRoute = require('./routes/userEditProfile')
 const getProfileRoute = require('./routes/userGetProfile')
+const trainInfoRoute = require('./routes/getTrainInfo')
 
 const SERVER_PORT = 8081
 
@@ -38,6 +39,7 @@ app.use('/reviews',getAllReview)
 app.use('/reviews',adminRoutes)
 app.use('/user', getProfileRoute)
 app.use('/user', editProfileRoute)
+app.use('/api', trainInfoRoute)
 
 
 app.listen(SERVER_PORT, (req, res) => {
