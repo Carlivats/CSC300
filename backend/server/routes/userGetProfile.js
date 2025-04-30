@@ -7,32 +7,26 @@ const mongoose = require("mongoose"); // Import mongoose
 const jwt = require("jsonwebtoken");
 
 const authMiddleware = (req, res, next) => {
-  console.log("Authorization header:", req.header("Authorization"));  // Log the incoming request
   const token = req.header("Authorization")?.replace("Bearer ", "");
   if (!token) {
-    console.error("No token found");
     return res.status(401).send("Authorization token required");
   }
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     req.userId = decoded.id;  // Assuming the token contains the userId
-    console.log("Decoded token:", decoded);  // Log decoded token data
     next();
   } catch (err) {
-    console.error("Token verification failed:", err);
     return res.status(401).send("Invalid or expired token");
   }
 };
+
 // Get user profile (image, description, and username)
-router.get("/profile", authMiddleware, async (req, res) => {
-  const userId = req.userId; // This comes from the token
+router.get("/profile/:id?", authMiddleware, async (req, res) => {
+  // Get the userId from the token or the requested profile id
+  const requestedUserId = req.params.id || req.userId;
 
   try {
-    // Explicitly instantiate ObjectId with 'new' keyword
-    const objectId = new mongoose.Types.ObjectId(userId); 
-
-    console.log("Attempting to find user with ObjectId:", objectId);
-
+    const objectId = new mongoose.Types.ObjectId(requestedUserId); 
     const user = await newUserModel.findById(objectId).select("profileImageUrl description username");
 
     if (!user) {
@@ -45,10 +39,8 @@ router.get("/profile", authMiddleware, async (req, res) => {
       username: user.username,
     }); 
   } catch (err) {
-    console.error("Error fetching user profile:", err);
     return res.status(500).send("Server error");
   }
 });
-
 
 module.exports = router;
