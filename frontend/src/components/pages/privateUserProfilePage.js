@@ -64,21 +64,21 @@ const PrivateUserProfile = () => {
 
   const handleSaveEdit = async () => {
     const token = localStorage.getItem("accessToken");
-  
+
     if (!token) {
       console.error("No token found.");
       return;
     }
-  
+
     let response;
-  
+
     try {
       if (selectedFile) {
         // Use FormData for file uploads
         const formData = new FormData();
         formData.append("description", newDescription);
         formData.append("profileImage", selectedFile); // Matches backend field name
-  
+
         response = await fetch("http://localhost:8081/user/editProfile", {
           method: "POST",
           headers: {
@@ -92,11 +92,11 @@ const PrivateUserProfile = () => {
         const jsonBody = {
           description: newDescription,
         };
-  
+
         if (imageUrlInput.trim()) {
           jsonBody.profileImageUrl = imageUrlInput.trim();
         }
-  
+
         response = await fetch("http://localhost:8081/user/editProfile", {
           method: "POST",
           headers: {
@@ -106,16 +106,16 @@ const PrivateUserProfile = () => {
           body: JSON.stringify(jsonBody),
         });
       }
-  
+
       if (!response.ok) throw new Error("Failed to update profile");
-  
+
       const data = await response.json();
       setUser((prevUser) => ({
         ...prevUser,
         description: data.description,
         profileImageUrl: data.profileImageUrl,
       }));
-  
+
       setEditShow(false);
       setNewDescription("");
       setImageUrlInput("");
@@ -125,9 +125,9 @@ const PrivateUserProfile = () => {
       alert("Error updating profile.");
     }
   };
-  
-  
-  
+
+
+
 
   if (!user.username) {
     return <div><h4>Log in to view this page.</h4></div>;
@@ -139,8 +139,7 @@ const PrivateUserProfile = () => {
       style={{
         padding: "0",
         margin: "0",
-        backgroundImage:
-          "url('https://www.metro.us/wp-content/uploads/2020/02/BOS_COMMUTER_RAIL_9_1-1536x1024.jpg')",
+        background: "linear-gradient(to bottom right, #3b82f6, #6366f1)",
         backgroundSize: "cover",
         backgroundPosition: "center top",
         backgroundRepeat: "no-repeat",
@@ -162,6 +161,7 @@ const PrivateUserProfile = () => {
           alignItems: "center",
           justifyContent: "flex-start",
           padding: "10px",
+          boxShadow: "2px 0 10px rgba(0,0,0,0.2)"
         }}
       >
         <Image
@@ -169,31 +169,39 @@ const PrivateUserProfile = () => {
           alt="Profile"
           roundedCircle
           style={{
-            width: "200px",
-            height: "200px",
+            width: "180px",
+            height: "180px",
             objectFit: "cover",
-            border: "3px solid white",
+            border: "4px solid white",
             marginBottom: "10px",
           }}
         />
-        <h4 style={{ color: "white", fontSize: "18px" }}>{user.username}</h4>
-        <div style={{ color: "white", fontSize: "16px", marginTop: "10px" }}>
+        <h4 className="text-white text-lg font-semibold">{user.username}</h4>
+        <div className="text-white text-sm mt-2 text-center">
           <p>Member Since: August 2020</p>
           <p>Location: Salem, MA</p>
         </div>
 
         <Button
-          variant="primary"
+          style={{
+            marginTop: "20px",
+            width: "100%",
+            backgroundColor: "#6366f1", // Indigo-500
+            border: "none"
+          }}
           onClick={() => setEditShow(true)}
-          style={{ marginTop: "20px", width: "100%" }}
         >
           Edit Profile
         </Button>
 
         <Button
-          variant="danger"
+          style={{
+            marginTop: "10px",
+            width: "100%",
+            backgroundColor: "#ef4444", // Red-500
+            border: "none"
+          }}
           onClick={() => setShow(true)}
-          style={{ marginTop: "10px", width: "100%" }}
         >
           Log Out
         </Button>
@@ -214,37 +222,34 @@ const PrivateUserProfile = () => {
         }}
       >
         <div
-          className="p-3 border rounded"
-          style={{
-            backgroundColor: "rgba(211, 211, 211, 0.9)",
-            height: "100%",
-            paddingTop: "20px",
-          }}
+          className="p-4 rounded-xl shadow-lg text-gray-800 bg-white/80 backdrop-blur"
+          style={{ height: "100%" }}
         >
-          <h5>Description</h5>
+          <h5 className="text-2xl font-bold mb-3 text-indigo-700">Profile Description</h5>
           <p>{user.description || "No description available."}</p>
         </div>
       </div>
 
       {/* Edit Profile Modal */}
-      <Modal show={editShow} onHide={() => setEditShow(false)}>
-        <Modal.Header closeButton>
+      <Modal show={editShow} onHide={() => setEditShow(false)} centered>
+        <Modal.Header closeButton className="bg-indigo-600 text-white">
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="bg-white">
           <form>
             <div className="mb-3">
-              <label>Description</label>
+              <label className="form-label fw-semibold">Description</label>
               <textarea
                 className="form-control"
                 value={newDescription}
                 onChange={handleDescriptionChange}
                 rows="3"
+                placeholder="Write something about yourself..."
               />
             </div>
 
             <div className="mb-3">
-              <label>Upload New Profile Image</label>
+              <label className="form-label fw-semibold">Upload New Profile Image</label>
               <input
                 type="file"
                 className="form-control"
@@ -254,7 +259,7 @@ const PrivateUserProfile = () => {
             </div>
 
             <div className="mb-3">
-              <label>Or Enter Image URL</label>
+              <label className="form-label fw-semibold">Or Enter Image URL</label>
               <input
                 type="url"
                 className="form-control"
@@ -265,31 +270,50 @@ const PrivateUserProfile = () => {
             </div>
           </form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setEditShow(false)}>
+        <Modal.Footer className="bg-gray-100">
+          <Button
+            variant="secondary"
+            className="rounded-pill px-4"
+            onClick={() => setEditShow(false)}
+          >
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleSaveEdit}>
+          <Button
+            style={{ backgroundColor: "#6366f1", border: "none" }} // Indigo-500
+            className="rounded-pill px-4"
+            onClick={handleSaveEdit}
+          >
             Save Changes
           </Button>
         </Modal.Footer>
       </Modal>
 
       {/* Logout Modal */}
-      <Modal show={show} onHide={() => setShow(false)}>
-        <Modal.Header closeButton>
+      <Modal show={show} onHide={() => setShow(false)} centered>
+        <Modal.Header closeButton className="bg-red-600 text-white">
           <Modal.Title>Confirm Logout</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Are you sure you want to log out?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShow(false)}>
+        <Modal.Body className="bg-white text-center">
+          <p className="mb-0 text-gray-800">Are you sure you want to log out?</p>
+        </Modal.Body>
+        <Modal.Footer className="bg-gray-100">
+          <Button
+            variant="secondary"
+            className="rounded-pill px-4"
+            onClick={() => setShow(false)}
+          >
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleLogout}>
+          <Button
+            style={{ backgroundColor: "#ef4444", border: "none" }} // Red-500
+            className="rounded-pill px-4"
+            onClick={handleLogout}
+          >
             Log Out
           </Button>
         </Modal.Footer>
       </Modal>
+
     </div>
   );
 };

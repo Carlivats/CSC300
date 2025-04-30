@@ -1,23 +1,31 @@
-import React from 'react'
-import Card from 'react-bootstrap/Card';
+import React from 'react';
 
 const Landingpage = () => {
-    
-    return (
-        <div className="bg-blue-500 text-white p-5">
-            <Card style={{ width: '30rem' }} className="mx-2 my-2">
-                <Card.Body>
-                    <Card.Title>Professor Brockenbrough's User Skeleton App</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">A starting point for an application.</Card.Subtitle>
-                    <Card.Text>
-                        If you see this with a blue background and white text, Tailwind is working!
-                    </Card.Text>
-                    <Card.Link href="/signup">Sign Up</Card.Link>
-                    <Card.Link href="/login">Login</Card.Link>
-                </Card.Body>
-            </Card>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-800 text-white flex items-center justify-center p-6">
+      <div className="bg-white rounded-2xl shadow-lg p-10 max-w-md w-full text-center text-gray-900">
+        <h1 className="text-3xl font-bold mb-4">🚆 MBTA PTAR</h1>
+        <h2 className="text-lg font-semibold text-indigo-600 mb-6">MBTA Public Transit Activity Reporter</h2>
+        <p className="mb-8">
+          Track real-time train locations, view occupancy levels, and get live updates from Boston's transit system.
+        </p>
+        <div className="flex flex-col space-y-4">
+          <a
+            href="/signup"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-xl font-semibold transition"
+          >
+            Get Started
+          </a>
+          <a
+            href="/login"
+            className="text-indigo-600 hover:underline text-sm"
+          >
+            Already have an account? Log in
+          </a>
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
 export default Landingpage;

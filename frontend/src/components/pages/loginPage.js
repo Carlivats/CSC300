@@ -5,29 +5,33 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import getUserInfo from "../../utilities/decodeJwt";
 
-const PRIMARY_COLOR = "#cc5c99";
-const SECONDARY_COLOR = '#0c0c1f'
+const PRIMARY_COLOR = "#6366f1";
+const SECONDARY_COLOR = "#1f1f1f";
+const LIGHT_COLOR = "#ffffff";
 const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/login`;
 
 const Login = () => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
   const [data, setData] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
   const [light, setLight] = useState(false);
   const [bgColor, setBgColor] = useState(SECONDARY_COLOR);
-  const [bgText, setBgText] = useState('Light Mode')
+  const [bgText, setBgText] = useState("Light Mode");
   const navigate = useNavigate();
 
-  let labelStyling = {
+  const labelStyling = {
     color: PRIMARY_COLOR,
-    fontWeight: "bold",
-    textDecoration: "none",
+    fontWeight: "600",
   };
-  let backgroundStyling = { background: bgColor };
-  let buttonStyling = {
-    background: PRIMARY_COLOR,
-    borderStyle: "none",
-    color: bgColor,
+  const backgroundStyling = {
+    backgroundColor: bgColor,
+    transition: "background-color 0.3s ease",
+  };
+  const buttonStyling = {
+    backgroundColor: PRIMARY_COLOR,
+    border: "none",
+    color: LIGHT_COLOR,
+    fontWeight: "bold",
   };
 
   const handleChange = ({ currentTarget: input }) => {
@@ -35,16 +39,15 @@ const Login = () => {
   };
 
   useEffect(() => {
-
-    const obj = getUserInfo(user)
-    setUser(obj)
+    const obj = getUserInfo(user);
+    setUser(obj);
 
     if (light) {
-      setBgColor("white");
-      setBgText('Dark mode')
+      setBgColor(LIGHT_COLOR);
+      setBgText("Dark Mode");
     } else {
       setBgColor(SECONDARY_COLOR);
-      setBgText('Light mode')
+      setBgText("Light Mode");
     }
   }, [light]);
 
@@ -53,91 +56,83 @@ const Login = () => {
     try {
       const { data: res } = await axios.post(url, data);
       const { accessToken } = res;
-      //store token in localStorage
       localStorage.setItem("accessToken", accessToken);
-      navigate("/home");
+      navigate("/privateUserProfile");
     } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
+      if (error.response && error.response.status >= 400 && error.response.status <= 500) {
         setError(error.response.data.message);
       }
     }
   };
 
-  if(user) {
-    navigate('/home')
-    return
+  if (user) {
+    navigate("/privateUserProfile");
+    return;
   }
 
   return (
-    <>
-      <section className="vh-100">
-        <div className="container-fluid h-custom vh-100">
-          <div
-            className="row d-flex justify-content-center align-items-center h-100 "
-            style={backgroundStyling}>
-            <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-              <Form>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label style={labelStyling}>Username</Form.Label>
-                  <Form.Control
-                    type="username"
-                    name="username"
-                    onChange={handleChange}
-                    placeholder="Enter username test"
-                  />
-                  <Form.Text className="text-muted">
-                    We just might sell your data
-                  </Form.Text>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label style={labelStyling}>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                  <Form.Text className="text-muted pt-1">
-                    Dont have an account?
-                    <span>
-                      <Link to="/signup" style={labelStyling}> Sign up
-                      </Link>
-                    </span>
-                  </Form.Text>
-                </Form.Group>
-                <div class="form-check form-switch">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="flexSwitchCheckDefault"
-                    onChange={() => { setLight(!light) }}
-                  />
-                  <label class="form-check-label" for="flexSwitchCheckDefault" className='text-muted'>
-                    {bgText}
-                  </label>
+    <section className="vh-100 d-flex align-items-center" style={backgroundStyling}>
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-md-6 col-lg-5 bg-white p-5 rounded-4 shadow">
+            <h2 className="text-center mb-4" style={{ color: PRIMARY_COLOR, fontWeight: "bold" }}>
+              MBTA PTAR Login
+            </h2>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="formUsername">
+                <Form.Label style={labelStyling}>Username</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="username"
+                  onChange={handleChange}
+                  placeholder="Enter username"
+                />
+                <Form.Text className="text-muted">We just might sell your data.</Form.Text>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formPassword">
+                <Form.Label style={labelStyling}>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <div className="mb-3 text-muted">
+                Don't have an account?
+                <Link to="/signup" style={{ color: PRIMARY_COLOR, fontWeight: "600", marginLeft: "5px" }}>
+                  Sign up
+                </Link>
+              </div>
+
+              <div className="form-check form-switch mb-3">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="flexSwitchCheckDefault"
+                  onChange={() => setLight(!light)}
+                />
+                <label className="form-check-label text-muted" htmlFor="flexSwitchCheckDefault">
+                  {bgText}
+                </label>
+              </div>
+
+              {error && (
+                <div className="text-danger mb-3" style={{ fontWeight: "500" }}>
+                  {error}
                 </div>
-                {error && <div style={labelStyling} className='pt-3'>{error}</div>}
-                <Button
-                  variant="primary"
-                  type="submit"
-                  onClick={handleSubmit}
-                  style={buttonStyling}
-                  className='mt-2'
-                >
-                  Log In
-                </Button>
-              </Form>
-            </div>
+              )}
+
+              <Button type="submit" style={buttonStyling} className="w-100">
+                Log In
+              </Button>
+            </Form>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
