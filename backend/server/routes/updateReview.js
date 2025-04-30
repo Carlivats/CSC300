@@ -4,7 +4,7 @@ const reviewModel = require("../models/reviewModel"); // Import Review model
 const { reviewValidation } = require("../models/reviewValidator"); // Validation function
 
 // 📌 PUT - Update a Review
-router.put("/updateReview/:id", async (req, res) => {
+router.put("/updateReview/:id", async (req, res) => { 
     try {
         // Validate the incoming review data
         const { error } = reviewValidation(req.body);
