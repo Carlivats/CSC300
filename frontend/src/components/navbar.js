@@ -23,13 +23,12 @@ export default function Navbar() {
     <ReactNavbar bg="dark" variant="dark">
     <Container>
       <Nav className="me-auto">
-        <Nav.Link href="/">Start</Nav.Link>
-        <Nav.Link href="/home">Home</Nav.Link>
-        <Nav.Link href="/mbtaAlerts">MBTA Alerts</Nav.Link>
-        <Nav.Link href="/mbtaVehicles">MBTA Vehichles</Nav.Link>
+        <Nav.Link href="/">Home</Nav.Link>
         <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
+        <Nav.Link href="/mbtaAlerts">MBTA Alerts</Nav.Link>
         <Nav.Link href="/trainInfo">Train Information</Nav.Link>
         <Nav.Link href="/train-selection">Train Selection</Nav.Link>
+        <Nav.Link href="/trainTest">trainTest</Nav.Link>
       </Nav>
     </Container>
   </ReactNavbar>

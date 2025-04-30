@@ -34,8 +34,6 @@ const authenticateToken = (req, res, next) => {
 router.post("/editProfile", authenticateToken, upload.single("profileImage"), async (req, res) => {
   const userId = req.userId;
 
-  console.log("edit hit");
-
   // Allow parsing description from either form-data or JSON
   const description = req.body.description;
   let profileImageUrl = req.body.profileImageUrl || null;

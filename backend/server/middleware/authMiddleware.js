@@ -15,7 +15,7 @@ const authenticateUser = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET); // Make sure ACCESS_TOKEN_SECRET is in your .env file
         
         // Find the user in the database using the decoded ID
-        const user = await User.findById(decoded.userId);
+        const user = await User.findById(decoded.id);
         
         if (!user) {
             return res.status(401).json({ message: 'Invalid token. User not found.' });
