@@ -29,6 +29,8 @@ export default function Navbar() {
         <Nav.Link href="/trainInfo">Train Information</Nav.Link>
         <Nav.Link href="/train-selection">Train Selection</Nav.Link>
         <Nav.Link href="/trainTest">trainTest</Nav.Link>
+        <Nav.Link href="/mbtaLayout">MBTA Layout</Nav.Link>
+        
       </Nav>
     </Container>
   </ReactNavbar>

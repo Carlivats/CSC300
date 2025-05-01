@@ -99,10 +99,6 @@ const TrainSchedule = () => {
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>Departure Time</th>
-            <th>Arrival Time</th>
-            <th>Direction</th>
-            <th>Status</th>
           </tr>
         </thead>
         <tbody>
