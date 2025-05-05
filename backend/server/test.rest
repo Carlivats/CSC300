@@ -146,3 +146,9 @@ Accept: application/json
 GET http://localhost:8081/user/profile/67fd7f40a6931d4044cb4ab9
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWYxZTUwOGYxM2I3NGQxM2VmNTExNSIsImVtYWlsIjoidHJhaW5zQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSWxvdmV0cmFpbnMyMDI1IiwicGFzc3dvcmQiOiIkMmIkMTAkamRkVmlWZVlZaWNpWC9sZHoyL1plLjlRWWRDbDBSbUxOL2V5RjcyLmU0eVEyS2JaWFVZZksiLCJpYXQiOjE3NDU5NjgxMjEsImV4cCI6MTc0NjA1NDUyMX0.asp4A3Ih4u7J_UjOuGbJ3AZXm1g4jvw8-M5NL3DqV8w
 Content-Type: application/json
+
+### Get stations for Red line
+GET http://localhost:8081/api/stations?line=Red
+
+### Then use one of the station IDs here:
+GET http://localhost:8081/api/trains?line=Red&station=place-davis&direction=0
