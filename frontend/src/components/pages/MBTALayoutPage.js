@@ -9,6 +9,13 @@ const MBTALayoutPage = () => {
   const [selectedLine, setSelectedLine] = useState('');
   const [routeShape, setRouteShape] = useState([]);
 
+  const bgClass =
+  selectedLine === 'Blue'   ? 'bg-blue-500'   :
+  selectedLine === 'Red'    ? 'bg-red-500'    :
+  selectedLine === 'Green'  ? 'bg-green-500'  :
+  selectedLine === 'Orange' ? 'bg-orange-500' :
+                              'bg-[#435ED3]';      //default background
+
   useEffect(() => {
     const fetchRouteShape = async () => {
       if (!selectedLine) return;
@@ -27,7 +34,7 @@ const MBTALayoutPage = () => {
   }, [selectedLine]);
 
   return (
-    <Container fluid className="p-3">
+    <Container fluid className={`p-3 ${bgClass}`}>
       <Row>
         <Col>
           <TrainSchedule routeShape={routeShape} />
