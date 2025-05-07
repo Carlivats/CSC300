@@ -3,18 +3,18 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import TrainTest from './trainTest';
 import TrainInfo from './trainInfo';
-import TrainSchedule from './trainSchedule';
+import ArrivingTrains from './ArrivingTrains';  // Updated to use ArrivingTrains instead of TrainSchedule
 
 const MBTALayoutPage = () => {
   const [selectedLine, setSelectedLine] = useState('');
   const [routeShape, setRouteShape] = useState([]);
 
   const bgClass =
-  selectedLine === 'Blue'   ? 'bg-blue-500'   :
-  selectedLine === 'Red'    ? 'bg-red-500'    :
-  selectedLine === 'Green'  ? 'bg-green-500'  :
-  selectedLine === 'Orange' ? 'bg-orange-500' :
-                              'bg-[#435ED3]';      //default background
+    selectedLine === 'Blue'   ? 'bg-blue-500'   :
+    selectedLine === 'Red'    ? 'bg-red-500'    :
+    selectedLine === 'Green'  ? 'bg-green-500'  :
+    selectedLine === 'Orange' ? 'bg-orange-500' :
+                                'bg-[#435ED3]';      // default background
 
   useEffect(() => {
     const fetchRouteShape = async () => {
@@ -37,13 +37,10 @@ const MBTALayoutPage = () => {
     <Container fluid className={`p-3 ${bgClass}`}>
       <Row>
         <Col>
-          <TrainSchedule routeShape={routeShape} />
+          <ArrivingTrains routeShape={routeShape} />  {/* Replaced TrainSchedule with ArrivingTrains */}
         </Col>
       </Row>
       <Row>
-        <Col md={6}>
-          <TrainTest onLineSelect={setSelectedLine} />
-        </Col>
         <Col md={6}>
           <TrainInfo />
         </Col>
@@ -53,3 +50,5 @@ const MBTALayoutPage = () => {
 };
 
 export default MBTALayoutPage;
+
+

@@ -17,6 +17,7 @@ function TrainInfo() {
       .then(data => {
         if (data.reviews) {
           setReviews(data.reviews); // Ensure we're accessing `reviews` correctly
+          setReviews([ ...data.reviews ].reverse())
         } else {
           console.error("Unexpected response format:", data);
         }
@@ -93,7 +94,7 @@ function TrainInfo() {
             <p>No reviews yet.</p>
           ) : (
             reviews.slice(0, visibleReviews).map(review => (
-              <Col md={6} key={review._id} className="mb-3">
+              <Col md={12} key={review._id} className="mb-3">
                 <Card className="review-card">
                   <Card.Body>
                     <img
