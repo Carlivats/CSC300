@@ -24,12 +24,11 @@ export default function Navbar() {
     <Container>
       <Nav className="me-auto">
         <Nav.Link href="/">Home</Nav.Link>
-        <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
-        <Nav.Link href="/mbtaAlerts">MBTA Alerts</Nav.Link>
-        <Nav.Link href="/trainInfo">Train Information</Nav.Link>
-        <Nav.Link href="/train-selection">Train Selection</Nav.Link>
-        <Nav.Link href="/trainTest">trainTest</Nav.Link>
         <Nav.Link href="/mbtaLayout">MBTA Layout</Nav.Link>
+        <Nav.Link href="/mbtaAlerts">MBTA Alerts</Nav.Link>
+        <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
+        <Nav.Link href="/train-selection">Train Selection</Nav.Link>
+        {/*<Nav.Link href="/trainTest">trainTest</Nav.Link>*/}
         
       </Nav>
     </Container>
