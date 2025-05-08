@@ -3,49 +3,79 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import TrainTest from './trainTest';
 import TrainInfo from './trainInfo';
-import ArrivingTrains from './ArrivingTrains';  // Updated to use ArrivingTrains instead of TrainSchedule
+import ArrivingTrains from './ArrivingTrains';
 
 const MBTALayoutPage = () => {
   const [selectedLine, setSelectedLine] = useState('');
   const [routeShape, setRouteShape] = useState([]);
+  
+  // Function to handle line selection from child components
+  const handleLineSelect = (line) => {
+    console.log("Selected line in MBTALayoutPage:", line);
+    setSelectedLine(line);
+  };
 
-  const bgClass =
-  selectedLine === 'Blue'   ? 'bg-blue-500'   :
-  selectedLine === 'Red'    ? 'bg-red-500'    :
-  selectedLine.startsWith('Green') ? 'bg-green-500'  :
-  selectedLine === 'Orange' ? 'bg-orange-500' :
-                              'bg-[#435ED3]';      //default background
+  // Function to get the background color class based on the selected line
+  const getBackgroundClass = () => {
+    if (!selectedLine) return 'bg-white';
+    
+    if (selectedLine === 'Red') return 'bg-red-500';
+    if (selectedLine === 'Blue') return 'bg-blue-500';
+    if (selectedLine === 'Orange') return 'bg-orange-500';
+    if (selectedLine.startsWith('Green') || selectedLine === 'Green') return 'bg-green-500';
+    
+    return 'bg-[#435ED3]'; // Default background
+  };
 
   useEffect(() => {
     const fetchRouteShape = async () => {
       if (!selectedLine) return;
-      const res = await fetch(`https://api-v3.mbta.com/shapes?filter[route]=${selectedLine}`);
-      const data = await res.json();
+      
+      try {
+        const res = await fetch(`https://api-v3.mbta.com/shapes?filter[route]=${selectedLine}`);
+        const data = await res.json();
 
-      // Extract lat/lng pairs
-      const shape = data.data.map(point => [
-        parseFloat(point.attributes.latitude),
-        parseFloat(point.attributes.longitude)
-      ]);
-      setRouteShape(shape);
+        // Extract lat/lng pairs
+        const shape = data.data.map(point => [
+          parseFloat(point.attributes.latitude),
+          parseFloat(point.attributes.longitude)
+        ]);
+        setRouteShape(shape);
+      } catch (error) {
+        console.error("Error fetching route shape:", error);
+        setRouteShape([]);
+      }
     };
 
     fetchRouteShape();
   }, [selectedLine]);
 
+  // Set background color using inline style to ensure it takes precedence
+  const bgStyle = {
+    backgroundColor: selectedLine === 'Red' ? '#da291c' :
+                     selectedLine === 'Blue' ? '#003da5' :
+                     selectedLine === 'Orange' ? '#ed8b00' :
+                     (selectedLine === 'Green' || selectedLine.startsWith('Green')) ? '#00843d' :
+                     '#ffffff',
+    minHeight: '100vh',
+    transition: 'background-color 0.3s ease'
+  };
+
   return (
-    <Container fluid className={`p-3 ${bgClass}`}>
-      <Row>
-        <Col>
-          <ArrivingTrains routeShape={routeShape} />  {/* Replaced TrainSchedule with ArrivingTrains */}
-        </Col>
-      </Row>
-      <Row>
-        <Col md={6}>
-          <TrainInfo />
-        </Col>
-      </Row>
-    </Container>
+    <div style={bgStyle}>
+      <Container fluid className="p-3">
+        <Row>
+          <Col>
+            <ArrivingTrains onLineSelect={handleLineSelect} routeShape={routeShape} />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={6}>
+            <TrainInfo />
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 
