@@ -341,31 +341,6 @@ function TrainInfo() {
           {reviews.length === 0 ? (
             <p>No reviews yet.</p>
           ) : (
-<<<<<<< HEAD
-            reviews.slice(0, visibleReviews).map(review => (
-              <Col md={12} key={review._id} className="mb-3">
-                <Card className="review-card">
-                  <Card.Body>
-                    <img
-                      src={review.profilePic || "https://via.placeholder.com/40"}
-                      alt={review.username}
-                      className="rounded-circle me-3"
-                      width="40"
-                      height="40"
-                    />
-                    <div>
-                      <Card.Title>{review.username}</Card.Title>
-                      <Card.Text>{renderStars(review.rating)}</Card.Text>
-                      <Card.Text>"{review.comment}"</Card.Text>
-                      <Card.Footer className="text-muted">
-                        {new Date(review.date).toLocaleDateString()}
-                      </Card.Footer>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))
-=======
             <>
               {!isLoggedIn ? (
                 <Alert variant="warning" className="mb-3 w-100">
@@ -377,7 +352,6 @@ function TrainInfo() {
                 displayReviews
               )}
             </>
->>>>>>> 6f1f8cc8f9111d853ba42710441c3b38d4626657
           )}
         </Row>
       </div>
