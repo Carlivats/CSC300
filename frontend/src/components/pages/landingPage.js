@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react';
 
 const Landingpage = () => {
   const handleGuestAccess = () => {
@@ -9,6 +10,12 @@ const Landingpage = () => {
     window.location.href = "/mbtaLayout";
   };
 
+
+  //removes token to fix issue with users being stuck logged in
+  useEffect(() => {
+    localStorage.removeItem("accessToken");
+  }, []);
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-800 text-white flex items-center justify-center p-6">
       <div className="bg-white rounded-2xl shadow-lg p-10 max-w-md w-full text-center text-gray-900">
