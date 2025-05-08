@@ -10,11 +10,11 @@ const MBTALayoutPage = () => {
   const [routeShape, setRouteShape] = useState([]);
 
   const bgClass =
-    selectedLine === 'Blue'   ? 'bg-blue-500'   :
-    selectedLine === 'Red'    ? 'bg-red-500'    :
-    selectedLine === 'Green'  ? 'bg-green-500'  :
-    selectedLine === 'Orange' ? 'bg-orange-500' :
-                                'bg-[#435ED3]';      // default background
+  selectedLine === 'Blue'   ? 'bg-blue-500'   :
+  selectedLine === 'Red'    ? 'bg-red-500'    :
+  selectedLine.startsWith('Green') ? 'bg-green-500'  :
+  selectedLine === 'Orange' ? 'bg-orange-500' :
+                              'bg-[#435ED3]';      //default background
 
   useEffect(() => {
     const fetchRouteShape = async () => {

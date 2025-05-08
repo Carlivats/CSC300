@@ -19,6 +19,7 @@ const PrivateUserProfile = () => {
       const token = localStorage.getItem("accessToken");
       if (!token) {
         console.warn("No token found in localStorage");
+        navigate('/');
         return;
       }
 
@@ -134,18 +135,19 @@ const PrivateUserProfile = () => {
   }
 
   return (
-    <div
-      className="container-fluid d-flex position-relative"
-      style={{
-        padding: "0",
-        margin: "0",
-        background: "linear-gradient(to bottom right, #3b82f6, #6366f1)",
-        backgroundSize: "cover",
-        backgroundPosition: "center top",
-        backgroundRepeat: "no-repeat",
-        minHeight: "100vh",
-      }}
-    >
+  <div
+   className="container-fluid d-flex position-relative"
+    style={{
+      padding: "0",
+      margin: "0",
+      backgroundImage: "url('https://arc-anglerfish-arc2-prod-bostonglobe.s3.amazonaws.com/public/C2H5U2R3SQI6TI4SR3LBLSWG2I.jpg')", // or use an external link
+      backgroundSize: "cover",
+      backgroundPosition: "center center",
+      backgroundRepeat: "no-repeat",
+      minHeight: "100vh",
+    }}
+>
+
       {/* Sidebar */}
       <div
         style={{
