@@ -1,28 +1,35 @@
 const express = require("express");
 const router = express.Router();
 const reviewModel = require("../models/reviewModel"); // Import Review model
-const { reviewValidation } = require("../models/reviewValidator"); // Validation function
+const { authenticateUser } = require("../middleware/authMiddleware"); // Import authentication
 
-// 📌 PUT - Update a Review
-router.put("/updateReview/:id", async (req, res) => { 
+// 📌 PUT - Update a Review - Admin can update any review
+router.put("/updateReview/:id", authenticateUser, async (req, res) => { 
     try {
-        // Validate the incoming review data
-        const { error } = reviewValidation(req.body);
-        if (error) return res.status(400).send({ message: error.errors[0].message });
-
         const { id } = req.params; // Extract review ID from URL parameters
-        const { username, comment, rating } = req.body; // Extract review details from request body
-
-        // Find and update the review
-        const updatedReview = await reviewModel.findByIdAndUpdate(
-            id,
-            { username, comment, rating },
-            { new: true, runValidators: true } // Returns the updated document and runs validation
-        );
-
-        if (!updatedReview) {
+        const { comment, rating } = req.body; // Extract review details from request body
+        
+        // Check if user is admin (username === 'admin13')
+        const isAdmin = req.user.username === 'admin13';
+        
+        // Fetch the review to verify ownership
+        const review = await reviewModel.findById(id);
+        
+        if (!review) {
             return res.status(404).send({ message: "Review not found" });
         }
+        
+        // Only allow update if user is admin or the review belongs to the user
+        if (!isAdmin && review.username !== req.user.username) {
+            return res.status(403).send({ message: "You can only edit your own reviews" });
+        }
+
+        // Update the review - keep original username
+        const updatedReview = await reviewModel.findByIdAndUpdate(
+            id,
+            { comment, rating },
+            { new: true, runValidators: true } // Returns the updated document and runs validation
+        );
         
         res.status(200).send({
             message: "Review updated successfully!",

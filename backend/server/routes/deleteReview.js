@@ -1,13 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const reviewModel = require("../models/reviewModel"); // Import Review model
-const isAdmin = require("../middleware/isAdmin"); // Import admin check
 const { authenticateUser } = require("../middleware/authMiddleware"); // Import authentication
 
 // 📌 DELETE - Remove a Review by ID (Admin only)
-router.delete("/deleteReview/:id", authenticateUser, isAdmin, async (req, res) => {
+router.delete("/deleteReview/:id", authenticateUser, async (req, res) => {
     try {
         const { id } = req.params; // Extract review ID from URL parameters
+        
+        // Check if user is admin (username === 'admin13')
+        const isAdmin = req.user.username === 'admin13';
+        
+        if (!isAdmin) {
+            return res.status(403).send({ message: "Only admins can delete reviews" });
+        }
         
         // Find and delete the review
         const deletedReview = await reviewModel.findByIdAndDelete(id);

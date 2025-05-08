@@ -65,6 +65,20 @@ const Register = () => {
       if (loginResponse.data.accessToken) {
         localStorage.setItem("accessToken", loginResponse.data.accessToken);
         localStorage.removeItem("guestUser"); // Ensure not in guest mode
+        
+        // Store the username for admin checks
+        localStorage.setItem("username", data.username);
+        
+        // Check if this is the admin account
+        if (data.username === "admin13") {
+          localStorage.setItem("isAdmin", "true");
+        } else {
+          localStorage.removeItem("isAdmin");
+        }
+        
+        // Dispatch a custom event to notify components about auth change
+        window.dispatchEvent(new Event('authChange'));
+        
         navigate("/mbtaLayout");
       } else {
         // If login fails, redirect to login page

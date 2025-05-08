@@ -11,17 +11,29 @@ function TrainInfo() {
   const [error, setError] = useState(null);
   const [visibleReviews, setVisibleReviews] = useState(5);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [editingReview, setEditingReview] = useState(null);
+  const [editedComment, setEditedComment] = useState("");
+  const [editedRating, setEditedRating] = useState(5);
 
   // Add a function to check login status that can be called multiple times
   const checkLoginStatus = () => {
     const accessToken = localStorage.getItem("accessToken");
     const guestUser = localStorage.getItem("guestUser");
+    const username = localStorage.getItem("username");
     const isAuth = !!accessToken && !guestUser;
+    
+    // Check if user is admin (username is admin13)
+    const adminStatus = username === "admin13";
+    
     setIsLoggedIn(isAuth);
+    setIsAdmin(adminStatus);
     
     console.log("Auth Debug:", { 
       accessToken: accessToken ? "exists" : "none", 
       guestUser: guestUser ? "true" : "false",
+      username: username || "none",
+      isAdmin: adminStatus,
       isAuthenticated: isAuth 
     });
     return isAuth;
@@ -125,31 +137,162 @@ function TrainInfo() {
     }
   };
 
+  // Function to delete a review
+  const handleDeleteReview = async (reviewId) => {
+    if (!isAdmin) return;
+    
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      
+      await axios.delete(
+        `http://localhost:8081/reviews/deleteReview/${reviewId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      
+      // Refresh reviews
+      fetchReviews();
+    } catch (error) {
+      console.error("Error deleting review:", error.response?.data || error.message);
+    }
+  };
+
+  // Function to start editing a review
+  const handleEditReview = (review) => {
+    setEditingReview(review._id);
+    setEditedComment(review.comment);
+    setEditedRating(review.rating);
+  };
+
+  // Function to save edited review
+  const handleSaveEdit = async () => {
+    if (!editingReview || !isAdmin) return;
+    
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      
+      await axios.put(
+        `http://localhost:8081/reviews/updateReview/${editingReview}`,
+        {
+          comment: editedComment,
+          rating: editedRating
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      
+      // Reset editing state
+      setEditingReview(null);
+      setEditedComment("");
+      setEditedRating(5);
+      
+      // Refresh reviews
+      fetchReviews();
+    } catch (error) {
+      console.error("Error updating review:", error.response?.data || error.message);
+    }
+  };
+
+  // Function to cancel editing
+  const handleCancelEdit = () => {
+    setEditingReview(null);
+    setEditedComment("");
+    setEditedRating(5);
+  };
+
   // Function to Load More Reviews
   const loadMoreReviews = () => {
     const newReviwesNumber = 10
     setVisibleReviews(prev => prev + newReviwesNumber);
   }
 
-  // DEBUGGING: Display all reviews for testing purposes
+  // Display all reviews for testing purposes
   const displayReviews = reviews.slice(0, visibleReviews).map(review => (
     <Col md={6} key={review._id} className="mb-3">
       <Card className="review-card">
         <Card.Body>
-          <img
-            src={review.profilePic || "https://via.placeholder.com/40"}
-            alt={review.username}
-            className="rounded-circle me-3"
-            width="40"
-            height="40"
-          />
-          <div>
-            <Card.Title>{review.username}</Card.Title>
-            <Card.Text>{renderStars(review.rating)}</Card.Text>
-            <Card.Text>"{review.comment}"</Card.Text>
-            <Card.Footer className="text-muted">
-              {new Date(review.date).toLocaleDateString()}
-            </Card.Footer>
+          <div className="d-flex justify-content-between align-items-start">
+            <div className="d-flex">
+              <img
+                src={review.profilePic || "https://via.placeholder.com/40"}
+                alt={review.username}
+                className="rounded-circle me-3"
+                width="40"
+                height="40"
+              />
+              <div>
+                <Card.Title>{review.username}</Card.Title>
+                {editingReview === review._id ? (
+                  <>
+                    <select 
+                      className="form-select mb-2" 
+                      value={editedRating} 
+                      onChange={(e) => setEditedRating(parseInt(e.target.value))}
+                    >
+                      {[1, 2, 3, 4, 5].map(num => (
+                        <option key={num} value={num}>{num} Star{num > 1 && "s"}</option>
+                      ))}
+                    </select>
+                    <textarea 
+                      className="form-control mb-2"
+                      value={editedComment}
+                      onChange={(e) => setEditedComment(e.target.value)}
+                      rows="3"
+                    ></textarea>
+                    <div className="mt-2">
+                      <Button 
+                        variant="success" 
+                        size="sm" 
+                        onClick={handleSaveEdit} 
+                        className="me-2"
+                      >
+                        Save
+                      </Button>
+                      <Button 
+                        variant="secondary" 
+                        size="sm" 
+                        onClick={handleCancelEdit}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <Card.Text>{renderStars(review.rating)}</Card.Text>
+                    <Card.Text>"{review.comment}"</Card.Text>
+                    <Card.Footer className="text-muted">
+                      {new Date(review.date).toLocaleDateString()}
+                    </Card.Footer>
+                  </>
+                )}
+              </div>
+            </div>
+            {isAdmin && editingReview !== review._id && (
+              <div>
+                <Button 
+                  variant="outline-primary" 
+                  size="sm" 
+                  className="me-2" 
+                  onClick={() => handleEditReview(review)}
+                >
+                  Edit
+                </Button>
+                <Button 
+                  variant="outline-danger" 
+                  size="sm" 
+                  onClick={() => handleDeleteReview(review._id)}
+                >
+                  Delete
+                </Button>
+              </div>
+            )}
           </div>
         </Card.Body>
       </Card>
@@ -159,6 +302,15 @@ function TrainInfo() {
   return (
     <Container>
       <h1>User Ratings</h1>
+
+      {isAdmin && (
+        <Alert variant="info" className="mt-3 mb-3">
+          <Alert.Heading>Admin Mode</Alert.Heading>
+          <p>
+            You are logged in as an administrator. You can edit or delete user reviews, but cannot add new reviews.
+          </p>
+        </Alert>
+      )}
 
       {/* Overall Rating Card */}
       <Card>
@@ -170,16 +322,16 @@ function TrainInfo() {
         </Card.Body>
       </Card>
 
-      {isLoggedIn ? (
+      {isLoggedIn && !isAdmin ? (
         <CommentBox onSubmit={handleReviewSubmit} />
-      ) : (
+      ) : !isLoggedIn ? (
         <Alert variant="info" className="mt-3">
           <Alert.Heading>Want to leave a review?</Alert.Heading>
           <p>
             You need to be logged in to leave reviews. <a href="/login">Log in</a> or <a href="/signup">create an account</a> to participate.
           </p>
         </Alert>
-      )}
+      ) : null}
 
       <div className="review-container">
         <h2 className="my-3">Reviews</h2>
