@@ -57,7 +57,7 @@ const Login = () => {
       const { data: res } = await axios.post(url, data);
       const { accessToken } = res;
       localStorage.setItem("accessToken", accessToken);
-      navigate("/privateUserProfile");
+      navigate("/privateUserProfilePage");
     } catch (error) {
       if (error.response && error.response.status >= 400 && error.response.status <= 500) {
         setError(error.response.data.message);
@@ -66,7 +66,7 @@ const Login = () => {
   };
 
   if (user) {
-    navigate("/privateUserProfile");
+    navigate("/privateUserProfilePage");
     return;
   }
 
