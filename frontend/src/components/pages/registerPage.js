@@ -50,8 +50,26 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { response: res } = await axios.post(url, data);
-      navigate("/login");
+      // First, register the user
+      await axios.post(url, data);
+      
+      // Then, immediately log them in to get the token
+      const loginUrl = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/login`;
+      const loginData = { 
+        username: data.username,
+        password: data.password
+      };
+      
+      const loginResponse = await axios.post(loginUrl, loginData);
+      
+      if (loginResponse.data.accessToken) {
+        localStorage.setItem("accessToken", loginResponse.data.accessToken);
+        localStorage.removeItem("guestUser"); // Ensure not in guest mode
+        navigate("/mbtaLayout");
+      } else {
+        // If login fails, redirect to login page
+        navigate("/login");
+      }
     } catch (error) {
       if (
         error.response &&

@@ -56,8 +56,15 @@ const Login = () => {
     try {
       const { data: res } = await axios.post(url, data);
       const { accessToken } = res;
+      // Clear any guest user flags
+      localStorage.removeItem("guestUser");
+      // Set access token
       localStorage.setItem("accessToken", accessToken);
-      navigate("/privateUserProfile");
+      
+      // Dispatch a custom event to notify components about auth change
+      window.dispatchEvent(new Event('authChange'));
+      
+      navigate("/mbtaLayout");
     } catch (error) {
       if (error.response && error.response.status >= 400 && error.response.status <= 500) {
         setError(error.response.data.message);
@@ -66,7 +73,7 @@ const Login = () => {
   };
 
   if (user) {
-    navigate("/privateUserProfile");
+    navigate("/mbtaLayout");
     return;
   }
 
