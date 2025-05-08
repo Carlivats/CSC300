@@ -10,8 +10,8 @@ const TrainTest = ({ onLineSelect = () => {} }) => {
   const bgClass =
   line === 'Blue'   ? 'bg-blue-500'   :
   line === 'Red'    ? 'bg-red-500'    :
-  line === 'Green'  ? 'bg-green-500'  :
-  line === 'Orange' ? 'bg-orange-500' :
+  line === 'Orange'  ? 'bg-orange-500'  :
+  line.startsWith('Green') ? 'bg-green-500' :
                       'bg-[#435ED3]';    
 
   useEffect(() => {
@@ -24,14 +24,29 @@ const TrainTest = ({ onLineSelect = () => {} }) => {
     if (line) {
       // Fetch stations based on the selected line
       const fetchStations = async () => {
-        const res = await fetch(`http://localhost:8081/api/stations?line=${line}`);
-        const data = await res.json();
-        setStations(data.stations || []);  // Assuming the API returns a list of stations
+        let lineStations = [];
+        
+        // If the line is Green, handle sub-lines (A, B, C, D, E)
+        if (line === 'Green') {
+          const greenLines = ['Green-A', 'Green-B', 'Green-C', 'Green-D', 'Green-E'];
+          for (const subLine of greenLines) {
+            const res = await fetch(`http://localhost:8081/api/stations?line=${subLine}`);
+            const data = await res.json();
+            lineStations = [...lineStations, ...data.stations]; // Combine stations from all sub-lines
+          }
+        } else {
+          const res = await fetch(`http://localhost:8081/api/stations?line=${line}`);
+          const data = await res.json();
+          lineStations = data.stations || [];  // Assuming the API returns a list of stations for non-Green lines
+        }
+        
+        setStations(lineStations);
       };
+  
       fetchStations();
     }
   }, [line]);
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -81,8 +96,11 @@ const TrainTest = ({ onLineSelect = () => {} }) => {
             <option value="">-- Choose Line --</option>
             <option value="Red">Red</option>
             <option value="Blue">Blue</option>
-            <option value="Green">Green</option>
             <option value="Orange">Orange</option>
+            <option value="Green-B">Green B</option>
+            <option value="Green-C">Green C</option>
+            <option value="Green-D">Green D</option>
+            <option value="Green-E">Green E</option>
           </select>
         </div>
         
