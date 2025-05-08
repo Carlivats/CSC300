@@ -24,7 +24,7 @@ function TrainInfo() {
     const isAuth = !!accessToken && !guestUser;
     
     // Check if user is admin (username is admin13)
-    const adminStatus = username === "admin13";
+    const adminStatus = username === "admin13" && isAuth; // Only set admin if authenticated
     
     setIsLoggedIn(isAuth);
     setIsAdmin(adminStatus);
