@@ -7,7 +7,7 @@ const loginRoute = require('./routes/userLogin')
 const getAllUsersRoute = require('./routes/userGetAllUsers')
 const registerRoute = require('./routes/userSignUp')
 const getUserByIdRoute = require('./routes/userGetUserById')
-const dbConnection = require('./config/db.config')
+const connectDB = require('./config/db.config')
 const editUser = require('./routes/userEditUser')
 const deleteUser = require('./routes/userDeleteAll')
 const createReview = require('./routes/createReview')
@@ -22,7 +22,7 @@ const trainInfoRoute = require('./routes/getTrainInfo')
 
 const SERVER_PORT = 8081
 
-dbConnection()
+connectDB()
 app.use(cors({origin: '*'}))
 app.use(express.json())
 app.use('/user', loginRoute)
