@@ -6,20 +6,20 @@ import './index.css';
 
 // We import all the components we need in our app
 import Navbar from "./components/navbar";
-import LandingPage from "./components/pages/landingPage";
-import HomePage from "./components/pages/homePage";
-import Login from "./components/pages/loginPage";
-import Signup from "./components/pages/registerPage";
-import MbtaAlertsPage from "./components/pages/mbtaAlerts";
-import PrivateUserProfile from "./components/pages/privateUserProfilePage";
+import LandingPage from "./pages/landingPage";
+import HomePage from "./pages/homePage";
+import Login from "./pages/loginPage";
+import Signup from "./pages/registerPage";
+import MbtaAlertsPage from "./pages/mbtaAlerts";
+import PrivateUserProfile from "./pages/privateUserProfilePage";
 import { createContext, useState, useEffect } from "react";
 import getUserInfo from "./utilities/decodeJwt";
-import MbtaVehicles from "./components/pages/mbtaVehicles"
-import TrainInfo from "./components/pages/trainInfo"
-import TrainSelection from './components/pages/trainSelection';
-import TrainSchedule from './components/pages/trainSchedule';
-import TrainTest from './components/pages/trainTest';
-import MbtaLayoutPage from "./components/pages/MBTALayoutPage";
+import MbtaVehicles from "./pages/mbtaVehicles"
+import TrainInfo from "./pages/trainInfo"
+import TrainSelection from './pages/trainSelection';
+import TrainSchedule from './pages/trainSchedule';
+import TrainTest from './pages/trainTest';
+import MbtaLayoutPage from "./pages/MBTALayoutPage";
 
 
 export const UserContext = createContext();

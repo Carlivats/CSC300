@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useContext} from 'react';
-import getUserInfo from '../../utilities/decodeJwt';
+import getUserInfo from '../utilities/decodeJwt';
 import Alert from 'react-bootstrap/Alert';
 import Stack from 'react-bootstrap/Stack';
-import { UserContext } from '../../App';
+import { UserContext } from '../App';
 
 
 //  test change

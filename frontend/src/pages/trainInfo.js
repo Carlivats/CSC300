@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { Card, Container, Row, Col, Button, Alert } from "react-bootstrap"; // Import Bootstrap components
-import CommentBox from "../commentBox";
+import CommentBox from "../components/commentBox";
 
 const url = 'http://localhost:8081/reviews/getReviews';
 

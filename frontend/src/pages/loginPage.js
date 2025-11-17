@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import getUserInfo from "../../utilities/decodeJwt";
+import getUserInfo from "../utilities/decodeJwt";
 
 const PRIMARY_COLOR = "#6366f1";
 const SECONDARY_COLOR = "#1f1f1f";

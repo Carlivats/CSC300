@@ -1,34 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import { Modal, Button, Row, Col, Card } from 'react-bootstrap';
+import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import { Modal, Button, Row, Col, Card } from "react-bootstrap";
 
 // fix Leaflet icon URLs
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
-    'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl:
-    'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
 const ArrivingTrains = ({ onLineSelect = () => {}, routeShape = [] }) => {
-  const [line, setLine] = useState('');
-  const [station, setStation] = useState('');
-  const [direction, setDirection] = useState('');
+  const [line, setLine] = useState("");
+  const [station, setStation] = useState("");
+  const [direction, setDirection] = useState("");
   const [stations, setStations] = useState([]);
-  const [trains, setTrains] = useState([]);      // next 3 arrival times
-  const [vehicles, setVehicles] = useState([]);  // live vehicle locations
+  const [trains, setTrains] = useState([]); // next 3 arrival times
+  const [vehicles, setVehicles] = useState([]); // live vehicle locations
   const [showGreenLineModal, setShowGreenLineModal] = useState(false);
 
   // Green Line branches
   const greenLineBranches = [
-    { id: 'Green-B', name: 'B Branch', description: 'Boston College to Government Center' },
-    { id: 'Green-C', name: 'C Branch', description: 'Cleveland Circle to Government Center' },
-    { id: 'Green-D', name: 'D Branch', description: 'Riverside to Government Center' },
-    { id: 'Green-E', name: 'E Branch', description: 'Heath Street to Lechmere' }
+    {
+      id: "Green-B",
+      name: "B Branch",
+      description: "Boston College to Government Center",
+    },
+    {
+      id: "Green-C",
+      name: "C Branch",
+      description: "Cleveland Circle to Government Center",
+    },
+    {
+      id: "Green-D",
+      name: "D Branch",
+      description: "Riverside to Government Center",
+    },
+    {
+      id: "Green-E",
+      name: "E Branch",
+      description: "Heath Street to Lechmere",
+    },
   ];
 
   // Handle line selection and notify parent component
@@ -44,7 +59,7 @@ const ArrivingTrains = ({ onLineSelect = () => {}, routeShape = [] }) => {
     if (!line) return;
 
     // Special handling for Green Line without branch specification
-    if (line === 'Green') {
+    if (line === "Green") {
       setShowGreenLineModal(true);
       return;
     }
@@ -53,7 +68,7 @@ const ArrivingTrains = ({ onLineSelect = () => {}, routeShape = [] }) => {
       .then((r) => r.json())
       .then((data) => setStations(data.stations || []))
       .catch((err) => {
-        console.error('stations error', err);
+        console.error("stations error", err);
         setStations([]);
       });
   }, [line]);
@@ -78,22 +93,22 @@ const ArrivingTrains = ({ onLineSelect = () => {}, routeShape = [] }) => {
       const data = await res.json();
       setTrains(Array.isArray(data.arrival_times) ? data.arrival_times : []);
     } catch (err) {
-      console.error('trains error', err);
+      console.error("trains error", err);
       setTrains([]);
-      alert('Could not load train times.');
+      alert("Could not load train times.");
     }
 
     // 2) fetch live vehicle positions (only by route + optional direction)
     try {
       const url =
         `https://api-v3.mbta.com/vehicles?filter[route]=${line}` +
-        `${direction ? `&filter[direction_id]=${direction}` : ''}`;
+        `${direction ? `&filter[direction_id]=${direction}` : ""}`;
 
       const vres = await fetch(url);
       const vdata = await vres.json();
       setVehicles(vdata.data || []);
     } catch (err) {
-      console.error('vehicles error', err);
+      console.error("vehicles error", err);
       setVehicles([]);
     }
   };
@@ -111,11 +126,11 @@ const ArrivingTrains = ({ onLineSelect = () => {}, routeShape = [] }) => {
               value={line}
               onChange={(e) => {
                 const selectedValue = e.target.value;
-                if (selectedValue === 'Green') {
+                if (selectedValue === "Green") {
                   setShowGreenLineModal(true);
                 } else {
                   setLine(selectedValue);
-                  setStation('');
+                  setStation("");
                   setTrains([]);
                   setVehicles([]);
                 }
@@ -230,29 +245,32 @@ const ArrivingTrains = ({ onLineSelect = () => {}, routeShape = [] }) => {
       </div>
 
       {/* Green Line Branches Modal */}
-      <Modal 
-        show={showGreenLineModal} 
+      <Modal
+        show={showGreenLineModal}
         onHide={() => setShowGreenLineModal(false)}
         centered
         backdrop="static"
         size="lg"
       >
-        <Modal.Header closeButton style={{ backgroundColor: '#00843d', color: 'white' }}>
+        <Modal.Header
+          closeButton
+          style={{ backgroundColor: "#00843d", color: "white" }}
+        >
           <Modal.Title>Select Green Line Branch</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ backgroundColor: '#f8f9fa' }}>
+        <Modal.Body style={{ backgroundColor: "#f8f9fa" }}>
           <Row xs={1} md={2} className="g-3">
             {greenLineBranches.map((branch) => (
               <Col key={branch.id}>
-                <Card 
+                <Card
                   onClick={() => handleGreenLineBranchSelect(branch.id)}
-                  style={{ 
-                    backgroundColor: '#00843d',
-                    color: 'white',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    minHeight: '120px',
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
+                  style={{
+                    backgroundColor: "#00843d",
+                    color: "white",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    minHeight: "120px",
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
                   }}
                   className="hover-shadow"
                 >
