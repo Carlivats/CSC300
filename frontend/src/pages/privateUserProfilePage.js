@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
+import EditProfileModal from "../components/EditProfileModal";
+import LogoutModal from "../components/LogoutModal";
 
 const PrivateUserProfile = () => {
   const [show, setShow] = useState(false);
@@ -19,7 +20,7 @@ const PrivateUserProfile = () => {
       const token = localStorage.getItem("accessToken");
       if (!token) {
         console.warn("No token found in localStorage");
-        navigate('/');
+        navigate("/");
         return;
       }
 
@@ -127,27 +128,28 @@ const PrivateUserProfile = () => {
     }
   };
 
-
-
-
   if (!user.username) {
-    return <div><h4>Log in to view this page.</h4></div>;
+    return (
+      <div>
+        <h4>Log in to view this page.</h4>
+      </div>
+    );
   }
 
   return (
-  <div
-   className="container-fluid d-flex position-relative"
-    style={{
-      padding: "0",
-      margin: "0",
-      backgroundImage: "url('https://arc-anglerfish-arc2-prod-bostonglobe.s3.amazonaws.com/public/C2H5U2R3SQI6TI4SR3LBLSWG2I.jpg')", // or use an external link
-      backgroundSize: "cover",
-      backgroundPosition: "center center",
-      backgroundRepeat: "no-repeat",
-      minHeight: "100vh",
-    }}
->
-
+    <div
+      className="container-fluid d-flex position-relative"
+      style={{
+        padding: "0",
+        margin: "0",
+        backgroundImage:
+          "url('https://arc-anglerfish-arc2-prod-bostonglobe.s3.amazonaws.com/public/C2H5U2R3SQI6TI4SR3LBLSWG2I.jpg')", // or use an external link
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
+        backgroundRepeat: "no-repeat",
+        minHeight: "100vh",
+      }}
+    >
       {/* Sidebar */}
       <div
         style={{
@@ -163,7 +165,7 @@ const PrivateUserProfile = () => {
           alignItems: "center",
           justifyContent: "flex-start",
           padding: "10px",
-          boxShadow: "2px 0 10px rgba(0,0,0,0.2)"
+          boxShadow: "2px 0 10px rgba(0,0,0,0.2)",
         }}
       >
         <Image
@@ -189,7 +191,7 @@ const PrivateUserProfile = () => {
             marginTop: "20px",
             width: "100%",
             backgroundColor: "#6366f1", // Indigo-500
-            border: "none"
+            border: "none",
           }}
           onClick={() => setEditShow(true)}
         >
@@ -201,7 +203,7 @@ const PrivateUserProfile = () => {
             marginTop: "10px",
             width: "100%",
             backgroundColor: "#ef4444", // Red-500
-            border: "none"
+            border: "none",
           }}
           onClick={() => setShow(true)}
         >
@@ -227,95 +229,27 @@ const PrivateUserProfile = () => {
           className="p-4 rounded-xl shadow-lg text-gray-800 bg-white/80 backdrop-blur"
           style={{ height: "100%" }}
         >
-          <h5 className="text-2xl font-bold mb-3 text-indigo-700">Profile Description</h5>
+          <h5 className="text-2xl font-bold mb-3 text-indigo-700">
+            Profile Description
+          </h5>
           <p>{user.description || "No description available."}</p>
         </div>
       </div>
 
       {/* Edit Profile Modal */}
-      <Modal show={editShow} onHide={() => setEditShow(false)} centered>
-        <Modal.Header closeButton className="bg-indigo-600 text-white">
-          <Modal.Title>Edit Profile</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="bg-white">
-          <form>
-            <div className="mb-3">
-              <label className="form-label fw-semibold">Description</label>
-              <textarea
-                className="form-control"
-                value={newDescription}
-                onChange={handleDescriptionChange}
-                rows="3"
-                placeholder="Write something about yourself..."
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label fw-semibold">Upload New Profile Image</label>
-              <input
-                type="file"
-                className="form-control"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label fw-semibold">Or Enter Image URL</label>
-              <input
-                type="url"
-                className="form-control"
-                placeholder="https://example.com/image.jpg"
-                value={imageUrlInput}
-                onChange={(e) => setImageUrlInput(e.target.value)}
-              />
-            </div>
-          </form>
-        </Modal.Body>
-        <Modal.Footer className="bg-gray-100">
-          <Button
-            variant="secondary"
-            className="rounded-pill px-4"
-            onClick={() => setEditShow(false)}
-          >
-            Cancel
-          </Button>
-          <Button
-            style={{ backgroundColor: "#6366f1", border: "none" }} // Indigo-500
-            className="rounded-pill px-4"
-            onClick={handleSaveEdit}
-          >
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <EditProfileModal
+        editShow={editShow}
+        setEditShow={setEditShow}
+        newDescription={newDescription}
+        handleDescriptionChange={handleDescriptionChange}
+        handleFileChange={handleFileChange}
+        imageUrlInput={imageUrlInput}
+        setImageUrlInput={setImageUrlInput}
+        handleSaveEdit={handleSaveEdit}
+      />
 
       {/* Logout Modal */}
-      <Modal show={show} onHide={() => setShow(false)} centered>
-        <Modal.Header closeButton className="bg-red-600 text-white">
-          <Modal.Title>Confirm Logout</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="bg-white text-center">
-          <p className="mb-0 text-gray-800">Are you sure you want to log out?</p>
-        </Modal.Body>
-        <Modal.Footer className="bg-gray-100">
-          <Button
-            variant="secondary"
-            className="rounded-pill px-4"
-            onClick={() => setShow(false)}
-          >
-            Cancel
-          </Button>
-          <Button
-            style={{ backgroundColor: "#ef4444", border: "none" }} // Red-500
-            className="rounded-pill px-4"
-            onClick={handleLogout}
-          >
-            Log Out
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
+      <LogoutModal show={show} setShow={setShow} handleLogout={handleLogout} />
     </div>
   );
 };
