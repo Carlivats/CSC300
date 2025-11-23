@@ -1,9 +1,8 @@
 // MBTALayoutPage.js
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import TrainTest from './trainTest';
 import TrainInfo from './trainInfo';
-import ArrivingTrains from './ArrivingTrains';
+import ArrivingTrains from '../components/ArrivingTrains';
 
 const MBTALayoutPage = () => {
   const [selectedLine, setSelectedLine] = useState('');
@@ -11,19 +10,16 @@ const MBTALayoutPage = () => {
   
   // Function to handle line selection from child components
   const handleLineSelect = (line) => {
-    console.log("Selected line in MBTALayoutPage:", line);
     setSelectedLine(line);
   };
 
   // Function to get the background color class based on the selected line
   const getBackgroundClass = () => {
     if (!selectedLine) return 'bg-white';
-    
     if (selectedLine === 'Red') return 'bg-red-500';
     if (selectedLine === 'Blue') return 'bg-blue-500';
     if (selectedLine === 'Orange') return 'bg-orange-500';
     if (selectedLine.startsWith('Green') || selectedLine === 'Green') return 'bg-green-500';
-    
     return 'bg-[#435ED3]'; // Default background
   };
 
