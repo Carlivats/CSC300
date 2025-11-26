@@ -9,6 +9,34 @@ const Hero = () => {
         setColorIndex((prevIndex) => (prevIndex + 1) % colors.length);
     };
 
+    const scrollToStations = () => {
+        const target = document.getElementById('stations-section');
+        if (!target) return;
+        
+        const targetPosition = target.offsetTop - 100;
+        const startPosition = window.pageYOffset;
+        const distance = targetPosition - startPosition;
+        const duration = 1000;
+        let start = null;
+        
+        const animation = (currentTime) => {
+            if (start === null) start = currentTime;
+            const timeElapsed = currentTime - start;
+            const run = ease(timeElapsed, startPosition, distance, duration);
+            window.scrollTo(0, run);
+            if (timeElapsed < duration) requestAnimationFrame(animation);
+        };
+        
+        const ease = (t, b, c, d) => {
+            t /= d / 2;
+            if (t < 1) return c / 2 * t * t + b;
+            t--;
+            return -c / 2 * (t * (t - 2) - 1) + b;
+        };
+        
+        requestAnimationFrame(animation);
+    };
+
     return (
         <div className="hero-container">
             <h1 className="hero-title">Find the Best Way to</h1>
@@ -24,7 +52,7 @@ const Hero = () => {
             <button 
                 className="hero-button"
                 style={{ backgroundColor: colors[colorIndex] }}
-                onClick={changeColor}
+                onClick={scrollToStations}
             >
                 Select Station
             </button>

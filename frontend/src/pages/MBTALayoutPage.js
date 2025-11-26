@@ -52,7 +52,7 @@ const MBTALayoutPage = () => {
     <div>
       <Alerts />
       <Hero />
-      <Container fluid className="p-3">
+      <Container fluid className="p-3" id="stations-section">
         <Row>
           <Col>
             <ArrivingTrains onLineSelect={handleLineSelect} routeShape={routeShape} />
