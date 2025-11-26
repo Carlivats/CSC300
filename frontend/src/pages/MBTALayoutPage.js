@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import TrainInfo from './trainInfo';
 import ArrivingTrains from '../components/ArrivingTrains';
+import Alerts from '../components/Alerts';
 
 const MBTALayoutPage = () => {
   const [selectedLine, setSelectedLine] = useState('');
@@ -59,6 +60,7 @@ const MBTALayoutPage = () => {
 
   return (
     <div style={bgStyle}>
+      <Alerts />
       <Container fluid className="p-3">
         <Row>
           <Col>
