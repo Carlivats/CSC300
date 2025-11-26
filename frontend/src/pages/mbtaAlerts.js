@@ -4,7 +4,7 @@ import axios from 'axios';
 
 
 function Alerts() {
-  const [alerts, setAlerts] = useState([]);
+  const [alert, setAlert] = useState(null);
 
 
   useEffect(() => {
@@ -12,16 +12,16 @@ function Alerts() {
       const result = await axios(
         'https://api-v3.mbta.com/alerts?sort=banner&filter%5Bactivity%5D=BOARD%2CEXIT%2CRIDE',
       );
-      setAlerts(result.data.data);
+      if (result.data.data.length > 0) {
+        setAlert(result.data.data[0]);
+      }
     }
     fetchData();
   }, []);
 
-
   return (
     <div>
-      {alerts.map(alert => (
-        <Card
+      <Card
         body
         outline
         color="success"
@@ -29,20 +29,14 @@ function Alerts() {
         style={{ width: "30rem" }}
       >
         <Card.Body>
-        <Card.Title>Alerts</Card.Title>
-        <Card.Text>{alert.attributes.header}{alert.attributes.description}</Card.Text>
+          <Card.Title>Alert</Card.Title>
+          <Card.Text>
+            <strong>{alert.attributes.header}</strong>
+            <br />
+            {alert.attributes.description}
+          </Card.Text>
         </Card.Body>
       </Card>
-      ))}
-
-
-        <h1>Alerts!</h1>
-      {alerts.map(alert => (
-        <div key={alert.id}>
-          <h3>{alert.attributes.header}</h3>
-          <p>{alert.attributes.description}</p>
-        </div>
-      ))}
     </div>
   );
 }
