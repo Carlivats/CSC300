@@ -20,6 +20,7 @@ import TrainSelection from './pages/trainSelection';
 import TrainSchedule from './pages/trainSchedule';
 import TrainTest from './pages/trainTest';
 import MbtaLayoutPage from "./pages/MBTALayoutPage";
+import Hero from "./components/Hero"
 
 
 export const UserContext = createContext();
@@ -49,6 +50,7 @@ const App = () => {
           <Route exact path="/train-schedule/:lineId" element={<TrainSchedule />} />
           <Route exact path="/trainTest" element={<TrainTest />} />
           <Route exact path="/mbtaLayout" element={<MbtaLayoutPage />} />
+          <Route exact path="/hero" element={<Hero />} />
         </Routes>
       </UserContext.Provider>
     </>
