@@ -4,6 +4,7 @@ import axios from 'axios';
 
 function Alerts() {
   const [alert, setAlert] = useState(null);
+  const [isVisible, setIsVisible] = useState(true);
 
 
   useEffect(() => {
@@ -17,6 +18,10 @@ function Alerts() {
     }
     fetchData();
   }, []);
+
+  if (!alert || !isVisible) {
+    return null;
+  }
 
   return (
     <div style={{
@@ -36,6 +41,32 @@ function Alerts() {
       }}>
         <strong>{alert.attributes.header}</strong> - {alert.attributes.description}
       </div>
+      <button
+        onClick={() => setIsVisible(false)}
+        style={{
+          position: 'absolute',
+          right: '50px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          backgroundColor: '#7009118e',
+          border: 'none',
+          borderRadius: '50%',
+          color: 'white',
+          width: '32px',
+          height: '32px',
+          fontSize: '22px',
+          cursor: 'pointer',
+          padding: '0',
+          paddingBottom: '9px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          lineHeight: '1'
+        }}
+        aria-label="Close alert"
+      >
+        x
+      </button>
       <style>
         {`
           @keyframes scroll-left {
