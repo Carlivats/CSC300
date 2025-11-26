@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Card from 'react-bootstrap/Card';
 import axios from 'axios';
 
 
@@ -20,23 +19,35 @@ function Alerts() {
   }, []);
 
   return (
-    <div>
-      <Card
-        body
-        outline
-        color="success"
-        className="mx-1 my-2"
-        style={{ width: "30rem" }}
-      >
-        <Card.Body>
-          <Card.Title>Alert</Card.Title>
-          <Card.Text>
-            <strong>{alert.attributes.header}</strong>
-            <br />
-            {alert.attributes.description}
-          </Card.Text>
-        </Card.Body>
-      </Card>
+    <div style={{
+      width: '100%',
+      backgroundColor: '#da636cff',
+      borderBottom: '2px solid #dc3545',
+      color: 'white',
+      padding: '10px 0',
+      fontSize: '16px',
+      overflow: 'hidden',
+      position: 'relative'
+    }}>
+      <div style={{
+        whiteSpace: 'nowrap',
+        animation: 'scroll-left 20s linear infinite',
+        display: 'inline-block'
+      }}>
+        <strong>{alert.attributes.header}</strong> - {alert.attributes.description}
+      </div>
+      <style>
+        {`
+          @keyframes scroll-left {
+            0% {
+              transform: translateX(100vw);
+            }
+            100% {
+              transform: translateX(-100%);
+            }
+          }
+        `}
+      </style>
     </div>
   );
 }
