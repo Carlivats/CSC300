@@ -48,19 +48,8 @@ const MBTALayoutPage = () => {
     fetchRouteShape();
   }, [selectedLine]);
 
-  // Set background color using inline style to ensure it takes precedence
-  const bgStyle = {
-    backgroundColor: selectedLine === 'Red' ? '#da291c' :
-                     selectedLine === 'Blue' ? '#003da5' :
-                     selectedLine === 'Orange' ? '#ed8b00' :
-                     (selectedLine === 'Green' || selectedLine.startsWith('Green')) ? '#00843d' :
-                     '#ffffff',
-    minHeight: '100vh',
-    transition: 'background-color 0.3s ease'
-  };
-
   return (
-    <div style={bgStyle}>
+    <div>
       <Alerts />
       <Hero />
       <Container fluid className="p-3">
