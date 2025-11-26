@@ -1,0 +1,46 @@
+.alert-banner {
+  width: 100%;
+  background-color: #da636cff;
+  border-bottom: 2px solid #dc3545;
+  color: white;
+  padding: 10px 0;
+  font-size: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.alert-text {
+  white-space: nowrap;
+  animation: scroll-left 20s linear infinite;
+  display: inline-block;
+}
+
+.close-button {
+  position: absolute;
+  right: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #7009118e;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  width: 32px;
+  height: 32px;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0;
+  padding-bottom: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100vw);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
